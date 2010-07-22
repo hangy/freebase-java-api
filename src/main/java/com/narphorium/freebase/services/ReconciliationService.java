@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.HttpClient;
 
 import com.narphorium.freebase.results.ReconciliationResult;
 import com.narphorium.freebase.results.ReconciliationResultSet;
@@ -17,12 +18,12 @@ public class ReconciliationService extends AbstractFreebaseService {
 	
 	private static final Log LOG = LogFactory.getLog(ReconciliationService.class);
 	
-	public ReconciliationService() {
-		super();
+	public ReconciliationService(final HttpClient httpClient) {
+		super(httpClient);
 	}
 	
-	public ReconciliationService(final URL baseUrl) {
-		super(baseUrl);
+	public ReconciliationService(final URL baseUrl, final HttpClient httpClient) {
+		super(baseUrl, httpClient);
 	}
 	
 	public ReconciliationResultSet reconcile(Map<String, Object> values) {

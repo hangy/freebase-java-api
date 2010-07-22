@@ -1,7 +1,5 @@
 package com.narphorium.freebase.services;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -12,6 +10,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.HttpClient;
 
 import com.narphorium.freebase.query.Query;
 import com.narphorium.freebase.results.AbstractResultSet;
@@ -21,12 +20,12 @@ public class WriteService extends AbstractFreebaseService {
 	
 	private static final Log LOG = LogFactory.getLog(AbstractResultSet.class);
 	
-	public WriteService() {
-		super();
+	public WriteService(final HttpClient httpClient) {
+		super(httpClient);
 	}
 	
-	public WriteService(final URL baseUrl) {
-		super(baseUrl);
+	public WriteService(final URL baseUrl, final HttpClient httpClient) {
+		super(baseUrl, httpClient);
 	}
 	
 	public boolean authenticate(String username, String password) throws FreebaseServiceException {
@@ -35,15 +34,24 @@ public class WriteService extends AbstractFreebaseService {
 			Map<String, String> content = new HashMap<String, String>();
 			content.put("username", username);
 			content.put("password", password);
-			postContent(url, content);			
-			return true;
+			final String result = postContent(url, content);			
+			return null != result && !result.isEmpty();
 		} catch (MalformedURLException e) {
 			LOG.error(e.getMessage(), e);
-		} catch (UnsupportedEncodingException e) {
-			LOG.error(e.getMessage(), e);
-		} catch (IOException e) {
+		}
+		
+		return false;
+	}
+	
+	public boolean logout() {
+		try {
+			URL url = new URL(getBaseUrl() + "/account/logout");
+			final String result = postContent(url, new HashMap<String, String>(0));
+			return null != result && !result.isEmpty();
+		} catch (MalformedURLException e) {
 			LOG.error(e.getMessage(), e);
 		}
+		
 		return false;
 	}
 	
@@ -62,11 +70,8 @@ public class WriteService extends AbstractFreebaseService {
 			return postContent(url, content);
 		} catch (MalformedURLException e) {
 			LOG.error(e.getMessage(), e);
-		} catch (UnsupportedEncodingException e) {
-			LOG.error(e.getMessage(), e);
-		} catch (IOException e) {
-			LOG.error(e.getMessage(), e);
 		}
+		
 		return null;
 	}
 	

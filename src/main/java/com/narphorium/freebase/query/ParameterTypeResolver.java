@@ -73,8 +73,9 @@ public class ParameterTypeResolver {
 	@SuppressWarnings("unchecked")
 	private void processData(Query query, Object data, String expectedType) {
 		
-		if (data == null) return;
-		if (data instanceof List) {
+		if (data == null) {
+			return;
+		} else if (data instanceof List) {
 			for (Object element : (List<Object>)data) {
 				processData(query, element, expectedType);
 			}
