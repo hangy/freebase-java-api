@@ -5,7 +5,7 @@ import com.narphorium.freebase.services.ReadService;
 
 public class DefaultResultSet extends AbstractResultSet {
 	
-	public DefaultResultSet(Query query, ReadService readService) {
+	public DefaultResultSet(final Query query, final ReadService readService) {
 		super(query, readService);
 	}
 	

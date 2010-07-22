@@ -7,13 +7,13 @@ import com.narphorium.freebase.query.JsonPath;
 import com.narphorium.freebase.query.Query;
 
 public interface Result {
-	public Object getObject(JsonPath path);
-	public Object getObject(String variable);
-	public String getString(String variable);
-	public boolean getBoolean(String variable);
-	public int getInteger(String variable);
-	public float getFloat(String variable);
-	public Date getDate(String variable);
-	public List<Object> getCollection(String variable);
-	public Query getQuery();
+	Object getObject(JsonPath path);
+	Object getObject(String variable);
+	String getString(String variable);
+	boolean getBoolean(String variable);
+	int getInteger(String variable);
+	float getFloat(String variable);
+	Date getDate(String variable);
+	List<Object> getCollection(String variable);
+	Query getQuery();
 }

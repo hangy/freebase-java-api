@@ -1,6 +1,5 @@
 package com.narphorium.freebase.query;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +9,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.stringtree.json.JSONReader;
 
 import com.narphorium.freebase.query.io.QueryParser;
@@ -20,6 +21,7 @@ import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class ParameterTypeResolver {
 
+	private static final Log LOG = LogFactory.getLog(ParameterTypeResolver.class);
 	private static Pattern parameterNamePattern = Pattern.compile("([\\d\\w_]+):([\\d\\w_]+)");
 	private static Matcher parameterNameMatcher = parameterNamePattern.matcher("");
 	
@@ -57,8 +59,6 @@ public class ParameterTypeResolver {
 	
 	private ReadService readService;
 	private QueryParser queryParser;
-	private JSONReader reader = new JSONReader();
-	
 	public ParameterTypeResolver(ReadService readService) {
 		this.readService = readService;
 		this.queryParser = new QueryParser();
@@ -69,6 +69,8 @@ public class ParameterTypeResolver {
 		processData(query, query.getData(), "/type/object");
 	}
 
+
+	@SuppressWarnings("unchecked")
 	private void processData(Query query, Object data, String expectedType) {
 		
 		if (data == null) return;
@@ -128,35 +130,12 @@ public class ParameterTypeResolver {
 					expectedTypeByProperty.put(property, expectedType);
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOG.error(e.getMessage(), e);
 			} catch (FreebaseServiceException e) {
-				e.printStackTrace();
+				LOG.error(e.getMessage(), e);
 			}
 		}
 		return expectedType;
-	}
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		QueryParser parser = new QueryParser();
-		Query q1 = parser.parse(new File("D:\\Freebase\\Data\\Olympic Athletes\\add_athlete_details.mql"));
-		
-		ReadService readService = new ReadService();
-		ParameterTypeResolver typeResolver = new ParameterTypeResolver(readService);
-		typeResolver.process(q1);
-
-		for (Parameter parameter : q1.getParameters()) {
-			System.out.println(parameter.getName() + " = " + parameter.getExpectedType());
-		}
-		
-		q1.parseParameterValue("country", "/en/canada");
-		q1.parseParameterValue("height", "10");
-		q1.parseParameterValue("weight", "20.5");
-		q1.parseParameterValue("date_of_birth", "1995-04-17");
-		
-		System.out.println(q1.toString());
 	}
 
 }

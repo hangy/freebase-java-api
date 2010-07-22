@@ -9,14 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.narphorium.freebase.query.Query;
-import com.narphorium.freebase.query.io.QueryParser;
 import com.narphorium.freebase.results.ResultSet;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceTimeoutException;
 
 public class ReadService extends AbstractFreebaseService {
-	
-	private QueryParser queryParser = new QueryParser();
 	
 	public ReadService() {
 		super();
@@ -26,6 +23,7 @@ public class ReadService extends AbstractFreebaseService {
 		super(baseUrl);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Map<String, Object> readRaw(Query query, Object cursor) throws IOException, FreebaseServiceException {
 		List<Query> queries = new ArrayList<Query>();
 		queries.add(query);
@@ -79,6 +77,7 @@ public class ReadService extends AbstractFreebaseService {
 		return envelope;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void parseServiceErrors(Query query, Map<String, Object> data) throws FreebaseServiceException {
 		//Map<String, Object> responseData = (Map<String, Object>)response;
 		//Map<String, Object> queryData = responseData; //(Map<String, Object>)responseData.get(query.getName());
@@ -92,7 +91,7 @@ public class ReadService extends AbstractFreebaseService {
 			String host = null; //info.get("host").toString();
 			int port = 0; //Integer.parseInt(info.get("port").toString());
 			double timeout = 0; //Double.parseDouble(info.get("timeout").toString());
-			if (code.equals(FreebaseServiceTimeoutException.ERROR_CODE)) {
+			if (code.equals(FreebaseServiceTimeoutException.ERRORCODE)) {
 				throw new FreebaseServiceTimeoutException(description, host, port, timeout);
 			} else {
 				throw new FreebaseServiceException(code, description, host, port, timeout);

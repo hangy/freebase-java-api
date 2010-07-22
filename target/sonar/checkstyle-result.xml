@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="5.1">
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\AbstractQuery.java">
+<error line="18" column="26" severity="warning" message="Variable &apos;name&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="19" column="35" severity="warning" message="Variable &apos;parameters&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="20" column="35" severity="warning" message="Variable &apos;blankFields&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="21" column="42" severity="warning" message="Variable &apos;parametersByName&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="22" column="26" severity="warning" message="Variable &apos;data&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="47" column="9" severity="info" message="Die Methode &apos;copyData&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="68" column="9" severity="info" message="Die Methode &apos;getName&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="72" column="9" severity="info" message="Die Methode &apos;getData&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="76" column="9" severity="info" message="Die Methode &apos;getParameters&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="80" column="9" severity="info" message="Die Methode &apos;hasParameter&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="84" column="9" severity="info" message="Die Methode &apos;getParameter&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="88" column="9" severity="info" message="Die Methode &apos;resetParameters&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="94" column="9" severity="info" message="Die Methode &apos;setParameterValue&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="112" column="9" severity="info" message="Die Methode &apos;getBlankFields&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="116" column="9" severity="info" message="Die Methode &apos;getResultSet&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="120" column="9" severity="info" message="Die Methode &apos;setResultSet&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="124" column="9" severity="info" message="Die Methode &apos;toJSON&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\DefaultQuery.java">
+<error line="32" column="9" severity="info" message="Die Methode &apos;parseParameterValue&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="45" column="9" severity="info" message="Die Methode &apos;buildResultSet&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\io\QueryParser.java">
+<error line="29" column="9" severity="info" message="Die Methode &apos;parse&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="39" column="9" severity="info" message="Die Methode &apos;parse&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="63" column="9" severity="warning" message="Cyclomatic Complexity is 12 (max allowed is 10)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\io\QueryWriter.java">
+<error line="19" column="9" severity="info" message="Die Methode &apos;write&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="23" column="9" severity="warning" message="Cyclomatic Complexity is 16 (max allowed is 10)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="55" column="24" severity="warning" message="Boolean expression complexity is 4 (max allowed is 3)." source="com.puppycrawl.tools.checkstyle.checks.metrics.BooleanExpressionComplexityCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\JsonPath.java">
+<error line="25" column="9" severity="info" message="Die Methode &apos;addElement&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="29" column="9" severity="info" message="Die Methode &apos;getValue&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="36" column="38" severity="warning" message="Zuweisung an den Parameter &apos;data&apos; is nicht erlaubt." source="com.puppycrawl.tools.checkstyle.checks.coding.ParameterAssignmentCheck"/>
+<error line="38" column="38" severity="warning" message="Zuweisung an den Parameter &apos;data&apos; is nicht erlaubt." source="com.puppycrawl.tools.checkstyle.checks.coding.ParameterAssignmentCheck"/>
+<error line="53" column="9" severity="info" message="Die Methode &apos;setValue&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="59" column="46" severity="warning" message="Zuweisung an den Parameter &apos;data&apos; is nicht erlaubt." source="com.puppycrawl.tools.checkstyle.checks.coding.ParameterAssignmentCheck"/>
+<error line="64" column="38" severity="warning" message="Zuweisung an den Parameter &apos;data&apos; is nicht erlaubt." source="com.puppycrawl.tools.checkstyle.checks.coding.ParameterAssignmentCheck"/>
+<error line="71" column="9" severity="info" message="Die Methode &apos;toString&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\Parameter.java">
+<error line="65" column="9" severity="info" message="Die Methode &apos;getName&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="73" column="9" severity="info" message="Die Methode &apos;getPath&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="77" column="9" severity="info" message="Die Methode &apos;getDefaultValue&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="81" column="9" severity="info" message="Die Methode &apos;getId&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="85" column="9" severity="info" message="Die Methode &apos;getKey&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="89" column="9" severity="info" message="Die Methode &apos;parseValue&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="93" column="9" severity="info" message="Die Methode &apos;getExpectedType&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="101" column="9" severity="info" message="Die Methode &apos;setPath&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="105" column="9" severity="info" message="Die Methode &apos;setExpectedType&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\ParameterTypeResolver.java">
+<error line="14" column="8" severity="info" message="Nicht benutztes import - org.stringtree.json.JSONReader." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="68" column="9" severity="info" message="Die Methode &apos;process&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="73" column="9" severity="warning" message="Cyclomatic Complexity is 12 (max allowed is 10)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+<error line="86" column="54" severity="warning" message="Zuweisung an den Parameter &apos;expectedType&apos; is nicht erlaubt." source="com.puppycrawl.tools.checkstyle.checks.coding.ParameterAssignmentCheck"/>
+<error line="88" column="54" severity="warning" message="Zuweisung an den Parameter &apos;expectedType&apos; is nicht erlaubt." source="com.puppycrawl.tools.checkstyle.checks.coding.ParameterAssignmentCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\Query.java">
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\results\AbstractResultSet.java">
+<error line="20" column="31" severity="warning" message="Variable &apos;readService&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="21" column="25" severity="warning" message="Variable &apos;query&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="22" column="32" severity="warning" message="Variable &apos;results&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="23" column="23" severity="warning" message="Variable &apos;currentResult&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="24" column="26" severity="warning" message="Variable &apos;cursor&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="25" column="23" severity="warning" message="Variable &apos;numPages&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="26" column="27" severity="warning" message="Variable &apos;fetchedFirstPage&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="34" column="9" severity="info" message="Die Methode &apos;getQuery&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="38" column="9" severity="info" message="Die Methode &apos;current&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="43" column="9" severity="info" message="Die Methode &apos;reset&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="48" column="9" severity="info" message="Die Methode &apos;size&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="55" column="9" severity="info" message="Die Methode &apos;isEmpty&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="59" column="9" severity="info" message="Die Methode &apos;next&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="62" column="72" severity="warning" message="Der Ausdruck kann vereinfacht werden." source="com.puppycrawl.tools.checkstyle.checks.coding.SimplifyBooleanExpressionCheck"/>
+<error line="69" column="9" severity="info" message="Die Methode &apos;hasNext&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="76" column="9" severity="info" message="Die Methode &apos;fetchNextPage&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="107" column="9" severity="info" message="Die Methode &apos;getReadService&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\results\DefaultResult.java">
+<error line="31" column="9" severity="info" message="Die Methode &apos;getObject&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="35" column="9" severity="info" message="Die Methode &apos;getObject&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="44" column="9" severity="info" message="Die Methode &apos;getCollection&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="49" column="9" severity="info" message="Die Methode &apos;getBoolean&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="53" column="9" severity="info" message="Die Methode &apos;getDate&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="63" column="9" severity="info" message="Die Methode &apos;getFloat&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="67" column="9" severity="info" message="Die Methode &apos;getInteger&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="71" column="9" severity="info" message="Die Methode &apos;getString&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="75" column="9" severity="info" message="Die Methode &apos;getQuery&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\results\DefaultResultSet.java">
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\results\ReconciliationResult.java">
+<error line="23" column="9" severity="info" message="Die Methode &apos;getId&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="27" column="9" severity="info" message="Die Methode &apos;setId&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="31" column="9" severity="info" message="Die Methode &apos;getScore&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="35" column="9" severity="info" message="Die Methode &apos;setScore&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="39" column="9" severity="info" message="Die Methode &apos;isMatch&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="43" column="9" severity="info" message="Die Methode &apos;setMatch&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="47" column="9" severity="info" message="Die Methode &apos;getNames&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="51" column="9" severity="info" message="Die Methode &apos;getAliases&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="55" column="9" severity="info" message="Die Methode &apos;getTypes&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\results\ReconciliationResultSet.java">
+<error line="17" column="9" severity="info" message="Die Methode &apos;iterator&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\results\Result.java">
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\results\ResultSet.java">
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\results\SearchResultSet.java">
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\AbstractFreebaseService.java">
+<error line="44" column="9" severity="info" message="Die Methode &apos;getBaseUrl&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="48" column="9" severity="info" message="Die Methode &apos;fetchPage&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="50" column="21" severity="warning" message="Zuweisung an den Parameter &apos;url&apos; is nicht erlaubt." source="com.puppycrawl.tools.checkstyle.checks.coding.ParameterAssignmentCheck"/>
+<error line="81" column="9" severity="info" message="Die Methode &apos;postContent&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="113" column="9" severity="info" message="Die Methode &apos;parseJSON&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="117" column="9" severity="info" message="Die Methode &apos;generateJSON&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\exceptions\FreebaseServiceException.java">
+<error line="25" column="9" severity="info" message="Die Methode &apos;getCode&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="34" column="9" severity="info" message="Die Methode &apos;getHost&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="43" column="9" severity="info" message="Die Methode &apos;getPort&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="52" column="9" severity="info" message="Die Methode &apos;getTimeout&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\exceptions\FreebaseServiceTimeoutException.java">
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\ReadService.java">
+<error line="26" column="9" severity="info" message="Die Methode &apos;readRaw&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="44" column="9" severity="info" message="Die Methode &apos;readRaw&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="48" column="9" severity="info" message="Die Methode &apos;read&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="52" column="9" severity="info" message="Die Methode &apos;read&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="56" column="9" severity="info" message="Die Methode &apos;buildReadQueryEnvelope&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="80" column="9" severity="info" message="Die Methode &apos;parseServiceErrors&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\ReconciliationService.java">
+<error line="28" column="9" severity="info" message="Die Methode &apos;reconcile&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\SearchService.java">
+<error line="9" column="9" severity="info" message="Die Methode &apos;search&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\TransService.java">
+<error line="19" column="9" severity="info" message="Die Methode &apos;fetchImage&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="23" column="9" severity="info" message="Die Methode &apos;fetchArticle&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="25" column="28" severity="warning" message="Zuweisung an den Parameter &apos;id&apos; is nicht erlaubt." source="com.puppycrawl.tools.checkstyle.checks.coding.ParameterAssignmentCheck"/>
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\UploadService.java">
+</file>
+<file name="D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\WriteService.java">
+<error line="32" column="9" severity="info" message="Die Methode &apos;authenticate&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="50" column="9" severity="info" message="Die Methode &apos;write&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="56" column="9" severity="info" message="Die Methode &apos;write&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="73" column="9" severity="info" message="Die Methode &apos;buildWriteQueryEnvelope&apos; ist nicht für Vererbung entworfen - muss abstract, final oder leer sein." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+</file>
+</checkstyle>

@@ -1,0 +1,85 @@
+Found a 9 line (64 tokens) duplication in the following files: 
+Starting at line 60 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\AbstractFreebaseService.java
+Starting at line 94 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\AbstractFreebaseService.java
+
+			int status = httpClient.executeMethod(method);
+			
+			if (status != HttpStatus.SC_OK) {
+	        	throw new IOException(status + ": Unable to reach host.");
+	        }
+	        
+	        BufferedReader reader = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream(), "utf8"));
+	        String line = null;
+	        while ((line = reader.readLine()) != null) {
+=====================================================================
+Found a 8 line (59 tokens) duplication in the following files: 
+Starting at line 40 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\WriteService.java
+Starting at line 63 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\WriteService.java
+
+		} catch (MalformedURLException e) {
+			LOG.error(e.getMessage(), e);
+		} catch (UnsupportedEncodingException e) {
+			LOG.error(e.getMessage(), e);
+		} catch (IOException e) {
+			LOG.error(e.getMessage(), e);
+		}
+		return null;
+=====================================================================
+Found a 8 line (41 tokens) duplication in the following files: 
+Starting at line 69 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\AbstractFreebaseService.java
+Starting at line 103 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\AbstractFreebaseService.java
+
+	        	result.append(line + "\n");
+	        }
+	        reader.close();
+		} catch (IOException e) {
+			LOG.error(e.getMessage(), e);
+		} finally {
+			method.releaseConnection();
+		}
+=====================================================================
+Found a 7 line (31 tokens) duplication in the following files: 
+Starting at line 35 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\DefaultQuery.java
+Starting at line 93 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\AbstractQuery.java
+
+	public void setParameterValue(String name, Object value) {
+		Parameter parameter = parametersByName.get(name);
+		if (parameter == null) {
+			LOG.error("Parameter \"" + name + "\" does not exist.");
+			return;
+		}
+		Object topData = data;
+=====================================================================
+Found a 4 line (28 tokens) duplication in the following files: 
+Starting at line 68 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\io\QueryParser.java
+Starting at line 82 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\ParameterTypeResolver.java
+
+				processData(query, element, expectedType);
+			}
+		} else if (data instanceof Map) {
+			Map<String, Object> mapData = (Map<String, Object>)data;
+=====================================================================
+Found a 4 line (26 tokens) duplication in the following files: 
+Starting at line 77 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\WriteService.java
+Starting at line 65 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\services\ReadService.java
+
+			Object cursor = j.next();
+			envelope += "\"" + query.getName() + "\":{";
+			envelope += "\"query\":" + query.toJSON();
+			envelope += ",\"cursor\":";
+=====================================================================
+Found a 3 line (25 tokens) duplication in the following files: 
+Starting at line 32 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\JsonPath.java
+Starting at line 53 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\JsonPath.java
+
+				if (k < elements.size() - 1) {
+					data = ((Map<String, Object>)data).get((String)key);
+				} else {
+=====================================================================
+Found a 3 line (25 tokens) duplication in the following files: 
+Starting at line 72 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\io\QueryParser.java
+Starting at line 94 of D:\Documents\Eclipse\Freebase\freebase-java-api\src\main\java\com\narphorium\freebase\query\ParameterTypeResolver.java
+
+			for (String key : mapData.keySet()){
+				Object value = mapData.get(key);
+				String childExpectedType = "/type/object";

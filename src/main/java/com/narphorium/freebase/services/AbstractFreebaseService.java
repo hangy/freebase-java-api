@@ -12,11 +12,14 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.stringtree.json.JSONReader;
 import org.stringtree.json.JSONWriter;
 
 public class AbstractFreebaseService {
 	
+	private static final Log LOG = LogFactory.getLog(AbstractFreebaseService.class);
 	private static final String USER_AGENT = "Freebase Java API (" + System.getProperty("os.name") + ")";
 	
 	private MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
@@ -30,7 +33,7 @@ public class AbstractFreebaseService {
 		try {
 			baseUrl = new URL("http://www.freebase.com/api");
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 	}
 	
@@ -38,7 +41,7 @@ public class AbstractFreebaseService {
 		this.baseUrl = baseUrl;
 	}
 	
-	public synchronized URL getBaseUrl() {
+	public synchronized URL getBaseUrl() { 
 		return baseUrl;
 	}
 
@@ -46,7 +49,7 @@ public class AbstractFreebaseService {
 		StringBuffer content = new StringBuffer();
 		url = url.replaceAll(" ", "%20");
 		
-		System.out.println("URL: " + url);
+		LOG.debug("URL: " + url);
 		
 		GetMethod method = new GetMethod(url);
 		try {
@@ -65,12 +68,12 @@ public class AbstractFreebaseService {
 	        }
 	        reader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		} finally {
 			method.releaseConnection();
 		}
 		
-		System.out.println(content);
+		LOG.debug(content);
 		
 		return content.toString();
 	}
@@ -88,9 +91,9 @@ public class AbstractFreebaseService {
 		try {
 			int status = httpClient.executeMethod(method);
 			
-			//if (status != HttpStatus.SC_OK) {
-	        //	throw new IOException(status + ": Unable to reach host.");
-	        //}
+			if (status != HttpStatus.SC_OK) {
+	        	throw new IOException(status + ": Unable to reach host.");
+	        }
 	        
 	        BufferedReader reader = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream(), "utf8"));
 	        String line = null;
@@ -99,7 +102,7 @@ public class AbstractFreebaseService {
 	        }
 	        reader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		} finally {
 			method.releaseConnection();
 		}

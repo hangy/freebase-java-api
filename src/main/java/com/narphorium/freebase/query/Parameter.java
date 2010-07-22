@@ -6,8 +6,8 @@ import java.util.Map;
 
 public class Parameter {
 	
-	public static interface TypeConverter {
-		public Object convert(String data);
+	public interface TypeConverter {
+		Object convert(String data);
 	}
 	
 	private static Map<String, TypeConverter> convertersByType = new HashMap<String, TypeConverter>();
@@ -46,23 +46,23 @@ public class Parameter {
 	private JsonPath path;
 	//private List<JsonPath> paths = new ArrayList<JsonPath>();
 	
-	public Parameter(String name, String id, Object defaultValue) {
+	public Parameter(final String name, final String id, final Object defaultValue) {
 		this.name = name;
 		this.id = id;
 		this.defaultValue = defaultValue;
 	}
 
-	public Parameter(Parameter parameter) {
+	public Parameter(final Parameter parameter) {
 		this.name = parameter.name;
 		this.id = parameter.id;
-		this.expectedType = parameter.expectedType;
-		this.valueConverter = parameter.valueConverter;
+		this.expectedType = parameter.getExpectedType();
+		this.valueConverter = parameter.getValueConverter();
 		this.defaultValue = parameter.defaultValue;
 		//this.paths.addAll(parameter.getPaths());
 		this.path = parameter.path;
 	}
 
-	public synchronized String getName() {
+	public synchronized String getName() { 
 		return name;
 	}
 
@@ -78,19 +78,19 @@ public class Parameter {
 		return defaultValue;
 	}
 
-	public synchronized String getId() {
+	public synchronized String getId() { 
 		return id;
 	}
 	
-	public synchronized String getKey() {
+	public synchronized String getKey() { 
 		return name + ":" + id;
 	}
 
-	public Object parseValue(String data) {
+	public synchronized Object parseValue(String data) {
 		return valueConverter.convert(data);
 	}
 
-	public synchronized String getExpectedType() {
+	public synchronized String getExpectedType() { 
 		return expectedType;
 	}
 	
@@ -102,7 +102,7 @@ public class Parameter {
 		this.path = path;
 	}
 
-	public synchronized void setExpectedType(String expectedType) {
+	public synchronized void setExpectedType(String expectedType) { 
 		this.expectedType = expectedType;
 		this.valueConverter = convertersByType.get(this.expectedType);
 		if (this.valueConverter == null) {
@@ -112,5 +112,9 @@ public class Parameter {
 				}
 			};
 		}
+	}
+	
+	private synchronized TypeConverter getValueConverter() {
+		return this.valueConverter;
 	}
 }

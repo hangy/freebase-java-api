@@ -1,6 +1,5 @@
 package com.narphorium.freebase.query.io;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -12,10 +11,6 @@ public class QueryWriter {
 	private String indent;
 	private String newline;
 	
-	private boolean alwaysShowOptional = false;
-	private boolean alwaysShowLimit = false;
-	private boolean shortenPropertyKeys = true;
-	
 	public QueryWriter(String indent, boolean multiline) {
 		this.indent = indent;
 		this.newline = multiline ? "\n" : "";
@@ -25,6 +20,7 @@ public class QueryWriter {
 		return writeNode(query.getData(), "", false);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private String writeNode(Object root, String offset, boolean withholdStartOffset) {
 		if (root instanceof List) {
 			String result = (withholdStartOffset ? "" : offset) + "[" + newline;
@@ -64,19 +60,8 @@ public class QueryWriter {
 		{
 			return root.toString();
 		}
+		
 		return null;
 	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		QueryParser parser = new QueryParser();
-		Query query = parser.parse(new File("D:\\Freebase\\Queries\\mql\\unformatted.mql"));
-		
-		QueryWriter writer = new QueryWriter("  ", true);
-		System.out.println(writer.write(query));
-
-	}
-
+	
 }

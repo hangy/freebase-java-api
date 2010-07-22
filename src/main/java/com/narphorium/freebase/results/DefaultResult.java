@@ -5,6 +5,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.narphorium.freebase.query.DefaultQuery;
 import com.narphorium.freebase.query.JsonPath;
@@ -13,7 +17,8 @@ import com.narphorium.freebase.query.Query;
 
 public class DefaultResult implements Result {
 
-	private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+	private static final Log LOG = LogFactory.getLog(DefaultResult.class);
+	private static final String DATEFORMAT = "yyyy-mm-dd";
 	
 	private Query query;
 	private Object jsonData;
@@ -30,12 +35,13 @@ public class DefaultResult implements Result {
 	public Object getObject(String variable) {
 		Parameter parameter = query.getParameter(variable);
 		if (parameter == null) {
-			System.out.println("ERROR: Parameter \"" + variable + "\" does not exist.");
+			LOG.error("Parameter \"" + variable + "\" does not exist.");
 			return null;
 		}
 		return getObject(parameter.getPath());
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Object> getCollection(String variable) {
 		return (List<Object>)getObject(variable);
 	}
@@ -45,9 +51,12 @@ public class DefaultResult implements Result {
 	}
 
 	public Date getDate(String variable) {
+		final DateFormat dateFormat = getDateFormat();
 		try {
 			return dateFormat.parse(getString(variable));
-		} catch (ParseException e) {}
+		} catch (ParseException e) {
+			LOG.debug(e.getMessage(), e);
+		}
 		return null;
 	}
 
@@ -66,4 +75,9 @@ public class DefaultResult implements Result {
 	public Query getQuery() {
 		return query;
 	}
+	
+	private static DateFormat getDateFormat() {
+		return new SimpleDateFormat(DATEFORMAT, Locale.ROOT);
+	}
+	
 }

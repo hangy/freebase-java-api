@@ -1,0 +1,5 @@
+#Thu Jul 22 13:18:43 CEST 2010
+eclipse.preferences.version=1
+projectArtifactId=freebase-java-api
+projectGroupId=com.narphorium
+sonarServerUrl=http\://localhost

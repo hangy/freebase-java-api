@@ -6,17 +6,17 @@ import com.narphorium.freebase.results.ResultSet;
 import com.narphorium.freebase.services.ReadService;
 
 public interface Query {
-	public Parameter getParameter(String name);
-	public void setParameterValue(String name, Object value);
-	public void parseParameterValue(String name, String value);
-	public String getName();
-	public void resetParameters();
-	public Object getData();
-	public List<Parameter> getParameters();
-	public List<Parameter> getBlankFields();
-	public ResultSet buildResultSet(ReadService readService);
-	public ResultSet getResultSet();
-	public void setResultSet(ResultSet resultSet);
-	public String toJSON();
-	public boolean hasParameter(String name);
+	Parameter getParameter(String name);
+	void setParameterValue(String name, Object value);
+	void parseParameterValue(String name, String value);
+	String getName();
+	void resetParameters();
+	Object getData();
+	List<Parameter> getParameters();
+	List<Parameter> getBlankFields();
+	ResultSet buildResultSet(ReadService readService);
+	ResultSet getResultSet();
+	void setResultSet(ResultSet resultSet);
+	String toJSON();
+	boolean hasParameter(String name);
 }

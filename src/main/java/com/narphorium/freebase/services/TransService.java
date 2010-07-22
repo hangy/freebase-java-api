@@ -12,11 +12,11 @@ public class TransService extends AbstractFreebaseService {
 		super();
 	}
 	
-	public TransService(URL baseUrl) {
+	public TransService(final URL baseUrl) {
 		super(baseUrl);
 	}
 	
-	public Image fetchImage(String guid) throws FreebaseServiceException {
+	public Image fetchImage(final String guid) throws FreebaseServiceException {
 		return null;
 	}
 	
@@ -27,22 +27,6 @@ public class TransService extends AbstractFreebaseService {
 		String url = getBaseUrl() + "/trans/raw" + id;
 		String content = fetchPage(url);
 		return content;
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		TransService trans = new TransService();
-		try {
-			String view = trans.fetchArticle("/base/ottawa/views/ottawa_parks");
-			System.out.println(view);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (FreebaseServiceException e) {
-			e.printStackTrace();
-		}
-		
 	}
 
 }

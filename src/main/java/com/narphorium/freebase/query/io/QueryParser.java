@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.stringtree.json.JSONReader;
 
 import com.narphorium.freebase.query.DefaultQuery;
@@ -20,6 +22,7 @@ import com.narphorium.freebase.query.Query;
 
 public class QueryParser {
 	
+	private static final Log LOG = LogFactory.getLog(QueryParser.class);
 	private static Pattern parameterNamePattern = Pattern.compile("([\\d\\w_]+):([\\d\\w_\\/]+)");
 	private static Matcher parameterNameMatcher = parameterNamePattern.matcher("");
 	
@@ -35,23 +38,32 @@ public class QueryParser {
 	
 	public Query parse(File queryFile) {
 		String name = queryFile.getName().substring(0, queryFile.getName().lastIndexOf('.'));
-		String queryString = "";
+		StringBuffer queryString = new StringBuffer();
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(queryFile));
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				queryString += line + "\n"; 
+			try {
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					queryString.append(line);
+					queryString.append("\n");
+				}
+				
+				return parse(name, queryString.toString());
 			}
-			return parse(name, queryString);
+			finally {
+				reader.close();
+			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
+		
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void processData(JsonPath path, Object data, List<Parameter> blankFields, List<Parameter> parameters, Map<String, Parameter> parametersByName, boolean isRoot) {
 		if (data == null) {
-			// Do nothing.
+			LOG.info("data is null");
 		} else if (data instanceof List) {
 			int i = 0;
 			for (Object element : (List<Object>)data) {
@@ -65,7 +77,6 @@ public class QueryParser {
 			Map<String, Object> mapData = (Map<String, Object>)data;
 			for (String key : mapData.keySet()){
 				Object value = mapData.get(key);
-				String childExpectedType = "/type/object";
 				JsonPath childPath = new JsonPath(path);
 				childPath.addElement(key);
 				String id = key;

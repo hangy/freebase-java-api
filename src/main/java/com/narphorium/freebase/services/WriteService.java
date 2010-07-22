@@ -10,16 +10,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.narphorium.freebase.query.Query;
+import com.narphorium.freebase.results.AbstractResultSet;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class WriteService extends AbstractFreebaseService {
+	
+	private static final Log LOG = LogFactory.getLog(AbstractResultSet.class);
 	
 	public WriteService() {
 		super();
 	}
 	
-	public WriteService(URL baseUrl) {
+	public WriteService(final URL baseUrl) {
 		super(baseUrl);
 	}
 	
@@ -29,25 +35,25 @@ public class WriteService extends AbstractFreebaseService {
 			Map<String, String> content = new HashMap<String, String>();
 			content.put("username", username);
 			content.put("password", password);
-			String result = postContent(url, content);			
+			postContent(url, content);			
 			return true;
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 		return false;
 	}
 	
-	public String write(Query query) throws FreebaseServiceException {
+	public String write(final Query query) throws FreebaseServiceException {
 		List<Query> queries = new ArrayList<Query>();
 		queries.add(query);
 		return write(queries);
 	}
 
-	public String write(List<Query> queries) throws FreebaseServiceException {
+	public String write(final List<Query> queries) throws FreebaseServiceException {
 		try {
 			URL url = new URL(getBaseUrl() + "/service/mqlwrite");
 			String envelope = buildWriteQueryEnvelope(queries);
@@ -55,16 +61,16 @@ public class WriteService extends AbstractFreebaseService {
 			content.put("queries", envelope);
 			return postContent(url, content);
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 		return null;
 	}
 	
-	protected String buildWriteQueryEnvelope(List<Query> queries) {
+	protected String buildWriteQueryEnvelope(final List<Query> queries) {
 		String envelope = "{";
 		Iterator<Query> i = queries.iterator();
 		while (i.hasNext()) {

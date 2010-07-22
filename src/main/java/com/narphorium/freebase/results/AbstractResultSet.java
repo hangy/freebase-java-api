@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.narphorium.freebase.query.DefaultQuery;
 import com.narphorium.freebase.query.Query;
 import com.narphorium.freebase.services.ReadService;
@@ -12,6 +15,8 @@ import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public abstract class AbstractResultSet implements ResultSet {
 
+	private static final Log LOG = LogFactory.getLog(AbstractResultSet.class);
+	
 	protected ReadService readService;
 	protected Query query;
 	protected List<Result> results = new ArrayList<Result>();
@@ -68,6 +73,7 @@ public abstract class AbstractResultSet implements ResultSet {
 		return currentResult < results.size() - 1;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void fetchNextPage() throws FreebaseServiceException {
 		try {
 			//String response = readService.readRaw(query, cursor);
@@ -94,7 +100,7 @@ public abstract class AbstractResultSet implements ResultSet {
 			}
 			fetchedFirstPage = true;
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 	}
 	

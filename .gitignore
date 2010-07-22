@@ -1,4 +1,7 @@
 bin
+reports
+target
 .classpath
 .project
 .settings
+.pmd
