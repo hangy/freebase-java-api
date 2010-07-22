@@ -23,7 +23,7 @@ public abstract class AbstractResultSet implements ResultSet {
 	protected int currentResult;
 	protected Object cursor;
 	protected int numPages;
-	protected boolean fetchedFirstPage = false;
+	protected boolean fetchedFirstPage;
 
 	public AbstractResultSet(Query query, ReadService readService) {
 		this.readService = readService;
@@ -41,6 +41,7 @@ public abstract class AbstractResultSet implements ResultSet {
 	}
 	
 	public void reset() {
+		fetchedFirstPage = false;
 		currentResult = -1;
 		cursor = true;
 	}
@@ -49,6 +50,7 @@ public abstract class AbstractResultSet implements ResultSet {
 		if (!fetchedFirstPage) {
 			fetchNextPage();
 		}
+		
 		return results.size();
 	}
 	
@@ -57,12 +59,13 @@ public abstract class AbstractResultSet implements ResultSet {
 	}
 
 	public Result next() throws FreebaseServiceException {
-		currentResult++;
-		if (currentResult >= results.size() && 
-			((cursor instanceof Boolean && (Boolean)cursor == true) || (cursor instanceof String)))
+		++currentResult;
+		if (currentResult >= (results.size() - 1)
+				&& ((cursor instanceof Boolean && (Boolean) cursor == true) || (cursor instanceof String)))
 		{
 			fetchNextPage();
 		}
+		
 		return current();
 	}
 	
@@ -70,6 +73,7 @@ public abstract class AbstractResultSet implements ResultSet {
 		if (!fetchedFirstPage) {
 			fetchNextPage();
 		}
+		
 		return currentResult < results.size() - 1;
 	}
 
@@ -92,12 +96,14 @@ public abstract class AbstractResultSet implements ResultSet {
 				Object obj = q.get("result");
 				results.add(new DefaultResult(query, obj));
 			}
+			
 			numPages++;
 			Object c = q.get("cursor");
 			if (c != null) { 
 				cursor = c;
-				//System.out.println("CURSOR = " + cursor);
+				LOG.info("CURSOR = " + cursor);
 			}
+			
 			fetchedFirstPage = true;
 		} catch (IOException e) {
 			LOG.error(e.getMessage(), e);
