@@ -7,13 +7,13 @@ Dependencies
 ------------
 - [Commons Logging](http://commons.apache.org/logging/)
 - [Commons Codec](http://commons.apache.org/codec/)
-- [HttpClient](http://hc.apache.org/httpclient-3.x/)
+- [HttpComponents Client](http://hc.apache.org/)
 - [Stringtree JSON](http://stringtree.org/stringtree-json.html)
 
 Usage
 -----
 
-See JavaDocs
+See JavaDocs and [Wiki](http://wiki.github.com/narphorium/freebase-java-api/).
 
 Building from source
 --------------------
