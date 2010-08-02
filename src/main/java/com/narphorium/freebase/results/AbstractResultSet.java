@@ -36,8 +36,7 @@ public abstract class AbstractResultSet implements ResultSet {
 	}
 
 	public Result current() {
-		Result resultData = currentResult >= 0 && currentResult < results.size() ? results.get(currentResult) : null;
-		return resultData;
+		return currentResult >= 0 && currentResult < results.size() ? results.get(currentResult) : null;
 	}
 	
 	public void reset() {

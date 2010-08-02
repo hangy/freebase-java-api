@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.stringtree.json.JSONReader;
 
 import com.narphorium.freebase.query.io.QueryParser;
 import com.narphorium.freebase.results.Result;

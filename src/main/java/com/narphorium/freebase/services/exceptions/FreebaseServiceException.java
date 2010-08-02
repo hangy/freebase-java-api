@@ -1,8 +1,8 @@
 package com.narphorium.freebase.services.exceptions;
 
 public class FreebaseServiceException extends Exception {
-
-	private static final long serialVersionUID = -3079674776812838795L;
+	
+	private static final long serialVersionUID = 5875197674296205286L;
 	
 	private String code;
 	private String host;
@@ -22,7 +22,7 @@ public class FreebaseServiceException extends Exception {
 		this.code = code;
 	}
 	
-	public String getCode() {
+	public final String getCode() {
 		return code;
 	}
 
@@ -31,7 +31,7 @@ public class FreebaseServiceException extends Exception {
 		this.host = host;
 	}
 	
-	public String getHost() {
+	public final String getHost() {
 		return host;
 	}
 
@@ -40,7 +40,7 @@ public class FreebaseServiceException extends Exception {
 		this.port = port;
 	}
 	
-	public int getPort() {
+	public final int getPort() {
 		return port;
 	}
 
@@ -49,7 +49,7 @@ public class FreebaseServiceException extends Exception {
 		this.timeout = timeout;
 	}
 	
-	public double getTimeout() {
+	public final double getTimeout() {
 		return timeout;
 	}
 
