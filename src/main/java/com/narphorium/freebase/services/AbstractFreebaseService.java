@@ -80,6 +80,23 @@ public class AbstractFreebaseService {
 	public synchronized URL getBaseUrl() { 
 		return baseUrl;
 	}
+	
+	/**
+	 * Resets the <code>mwLastWriteTime</code> cookie to the current time. This ensures that any requests from the time you use this service gets you the latest data instead of possibly stale cached data.
+	 * 
+	 * @see http://www.freebase.com/docs/web_services/touch
+	 * @return The Freebase.com response
+	 */
+	public final String touch() {
+		String result = "";
+		
+		HttpPost method = new HttpPost(this.baseUrl + "/service/touch");
+		method.addHeader("User-Agent", USER_AGENT);
+		method.addHeader("X-Metaweb-Request", "");
+		
+		result = getExecutionResult(method);
+		return result;
+	}
 
 	protected String fetchPage(String url) throws IOException {
 		String content = "";
