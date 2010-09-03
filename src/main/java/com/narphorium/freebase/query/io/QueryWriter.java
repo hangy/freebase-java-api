@@ -10,21 +10,22 @@ public class QueryWriter {
 
 	private String indent;
 	private String newline;
-	
-	public QueryWriter(String indent, boolean multiline) {
+
+	public QueryWriter(final String indent, final boolean multiline) {
 		this.indent = indent;
 		this.newline = multiline ? "\n" : "";
 	}
-	
-	public String write(Query query) {
+
+	public final String write(final Query query) {
 		return writeNode(query.getData(), "", false);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	private String writeNode(Object root, String offset, boolean withholdStartOffset) {
+	private String writeNode(final Object root, final String offset,
+			final boolean withholdStartOffset) {
 		if (root instanceof List) {
 			String result = (withholdStartOffset ? "" : offset) + "[" + newline;
-			List<Object> list = (List<Object>)root;
+			final List<Object> list = (List<Object>) root;
 			for (Iterator<Object> i = list.iterator(); i.hasNext();) {
 				result += writeNode(i.next(), offset + indent, false);
 				if (i.hasNext()) {
@@ -36,10 +37,11 @@ public class QueryWriter {
 			return result;
 		} else if (root instanceof Map) {
 			String result = (withholdStartOffset ? "" : offset) + "{" + newline;
-			Map<String, Object> map = (Map<String, Object>)root;
+			Map<String, Object> map = (Map<String, Object>) root;
 			for (Iterator<String> i = map.keySet().iterator(); i.hasNext();) {
-				String key = i.next();
-				result += offset + indent + "\"" + key + "\" : " + writeNode(map.get(key), offset + indent, true);
+				final String key = i.next();
+				result += offset + indent + "\"" + key + "\" : "
+						+ writeNode(map.get(key), offset + indent, true);
 				if (i.hasNext()) {
 					result += ",";
 				}
@@ -50,18 +52,18 @@ public class QueryWriter {
 		} else if (root == null) {
 			return "null";
 		} else if (root instanceof String) {
-			String value = root.toString();
+			final String value = root.toString();
 			return "\"" + value + "\"";
-		} else if (root instanceof Integer || 
-				   root instanceof Long || 
-				   root instanceof Float || 
-				   root instanceof Double || 
-				   root instanceof Boolean)
-		{
+		} else if (objectIsNumber(root) || root instanceof Boolean) {
 			return root.toString();
 		}
-		
+
 		return null;
 	}
-	
+
+	private boolean objectIsNumber(Object obj) {
+		return obj instanceof Integer || obj instanceof Long
+				|| obj instanceof Float || obj instanceof Double;
+	}
+
 }

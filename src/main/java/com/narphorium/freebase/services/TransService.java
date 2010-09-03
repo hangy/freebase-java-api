@@ -37,7 +37,7 @@ public class TransService extends AbstractFreebaseService {
 			final String url = getUrlForId(id);
 			final HttpGet method = new HttpGet(url);
 			method.addHeader("User-Agent", USER_AGENT);
-			ResponseHandler<Image> handler = new ResponseHandler<Image>() {
+			final ResponseHandler<Image> handler = new ResponseHandler<Image>() {
 				public Image handleResponse(HttpResponse response)
 						throws IOException {
 					final int status = response.getStatusLine().getStatusCode();

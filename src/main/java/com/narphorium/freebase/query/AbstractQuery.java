@@ -15,89 +15,94 @@ public abstract class AbstractQuery implements Query {
 
 	private static final Log LOG = LogFactory.getLog(AbstractQuery.class);
 
-	protected String name;
-	protected List<Parameter> parameters = new ArrayList<Parameter>();
-	protected List<Parameter> blankFields = new ArrayList<Parameter>();
-	protected Map<String, Parameter> parametersByName = new HashMap<String, Parameter>();
-	protected Object data;
+	private String name;
+	private List<Parameter> parameters = new ArrayList<Parameter>();
+	private List<Parameter> blankFields = new ArrayList<Parameter>();
+	private Map<String, Parameter> parametersByName = new HashMap<String, Parameter>();
+	private Object data;
 	private ResultSet resultSet;
 
-	public AbstractQuery(String name, Object data, List<Parameter> parameters,
-			List<Parameter> blankFields) {
+	public AbstractQuery(final String name, final Object data,
+			final List<Parameter> parameters, final List<Parameter> blankFields) {
 		this.name = name;
 		this.data = data;
-		for (Parameter parameter : parameters) {
+		for (final Parameter parameter : parameters) {
 			this.parameters.add(parameter);
 			this.parametersByName.put(parameter.getName(), parameter);
 		}
+
 		this.blankFields.addAll(blankFields);
 	}
 
-	public AbstractQuery(Query query) {
+	public AbstractQuery(final Query query) {
 		this.name = query.getName();
 		this.data = copyData(query.getData());
-		for (Parameter parameter : query.getParameters()) {
+		for (final Parameter parameter : query.getParameters()) {
 			this.parameters.add(parameter);
 			this.parametersByName.put(parameter.getName(), new Parameter(
 					parameter));
 		}
+
 		this.blankFields.addAll(query.getBlankFields());
 	}
 
 	@SuppressWarnings("unchecked")
-	protected Object copyData(Object data) {
+	private Object copyData(final Object data) {
 		if (data instanceof Map) {
-			Map<String, Object> mapData = (Map<String, Object>) data;
-			Map<String, Object> map = new HashMap<String, Object>();
-			for (String key : mapData.keySet()) {
+			final Map<String, Object> mapData = (Map<String, Object>) data;
+			final Map<String, Object> map = new HashMap<String, Object>();
+			for (final String key : mapData.keySet()) {
 				map.put(key, copyData(mapData.get(key)));
 			}
+
 			return map;
 		} else if (data instanceof List) {
-			List<Object> listData = (List<Object>) data;
-			List<Object> list = new ArrayList<Object>();
-			for (Object element : listData) {
+			final List<Object> listData = (List<Object>) data;
+			final List<Object> list = new ArrayList<Object>();
+			for (final Object element : listData) {
 				list.add(copyData(element));
 			}
+
 			return list;
 		} else {
 			return data;
 		}
 	}
 
-	public String getName() {
+	public final String getName() {
 		return name;
 	}
 
-	public Object getData() {
+	public final Object getData() {
 		return data;
 	}
 
-	public List<Parameter> getParameters() {
+	public final List<Parameter> getParameters() {
 		return parameters;
 	}
 
-	public boolean hasParameter(String name) {
+	public final boolean hasParameter(final String name) {
 		return parametersByName.containsKey(name);
 	}
 
-	public Parameter getParameter(String name) {
+	public final Parameter getParameter(final String name) {
 		return parametersByName.get(name);
 	}
 
-	public void resetParameters() {
-		for (Parameter parameter : parameters) {
+	public final void resetParameters() {
+		for (final Parameter parameter : parameters) {
 			setParameterValue(parameter.getName(), parameter.getDefaultValue());
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public void setParameterValue(String name, Object value) {
-		Parameter parameter = parametersByName.get(name);
+	public final void setParameterValue(final String name, final Object value) {
+		final Parameter parameter = parametersByName.get(name);
 		if (parameter == null) {
 			LOG.error("Parameter \"" + name + "\" does not exist.");
 			return;
 		}
+
 		Object topData = data;
 		if (topData instanceof List) {
 			topData = ((List<Object>) topData).get(0);
@@ -109,20 +114,20 @@ public abstract class AbstractQuery implements Query {
 		 */
 	}
 
-	public List<Parameter> getBlankFields() {
+	public final List<Parameter> getBlankFields() {
 		return blankFields;
 	}
 
-	public ResultSet getResultSet() {
+	public final ResultSet getResultSet() {
 		return resultSet;
 	}
 
-	public void setResultSet(ResultSet resultSet) {
+	public final void setResultSet(final ResultSet resultSet) {
 		this.resultSet = resultSet;
 	}
 
-	public String toJSON() {
-		JSONWriter writer = new JSONWriter();
+	public final String toJSON() {
+		final JSONWriter writer = new JSONWriter();
 		String query = writer.write(data);
 		query = query.replaceAll("\\\\/", "/");
 		return query;

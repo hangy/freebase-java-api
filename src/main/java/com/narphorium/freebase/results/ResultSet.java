@@ -6,11 +6,18 @@ import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public interface ResultSet {
 	int size() throws FreebaseServiceException;
+
 	boolean isEmpty();
+
 	boolean hasNext() throws FreebaseServiceException;
+
 	Result next() throws FreebaseServiceException;
+
 	Result current();
+
 	void reset();
+
 	ReadService getReadService();
+
 	Query getQuery();
 }

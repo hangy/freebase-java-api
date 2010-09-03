@@ -13,8 +13,8 @@ public class DefaultQuery extends AbstractQuery implements Query {
 
 	private static final Log LOG = LogFactory.getLog(DefaultQuery.class);
 
-	public DefaultQuery(String name, Object data, List<Parameter> parameters,
-			List<Parameter> blankFields) {
+	public DefaultQuery(final String name, final Object data,
+			final List<Parameter> parameters, final List<Parameter> blankFields) {
 		super(name, data, parameters, blankFields);
 
 		/*
@@ -25,24 +25,27 @@ public class DefaultQuery extends AbstractQuery implements Query {
 		 */
 	}
 
-	public DefaultQuery(Query query) {
+	public DefaultQuery(final Query query) {
 		super(query);
 	}
 
-	public void parseParameterValue(String name, String rawValue) {
-		Parameter parameter = parametersByName.get(name);
+	public final void parseParameterValue(final String name,
+			final String rawValue) {
+		final Parameter parameter = getParameter(name);
 		if (parameter == null) {
 			LOG.error("Parameter \"" + name + "\" does not exist.");
 			return;
 		}
+
 		Object value = null;
 		if (rawValue.length() > 0) {
 			value = parameter.parseValue(rawValue);
 		}
+
 		setParameterValue(name, value);
 	}
 
-	public ResultSet buildResultSet(ReadService readService) {
+	public final ResultSet buildResultSet(final ReadService readService) {
 		return new DefaultResultSet(this, readService);
 	}
 

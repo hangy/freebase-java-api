@@ -16,52 +16,58 @@ import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceTimeoutException;
 
 public class ReadService extends AbstractFreebaseService {
-	
+
 	public ReadService(final HttpClient httpClient) {
 		super(httpClient);
 	}
-	
+
 	public ReadService(final URL baseUrl, final HttpClient httpClient) {
 		super(baseUrl, httpClient);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> readRaw(Query query, Object cursor) throws IOException, FreebaseServiceException {
-		List<Query> queries = new ArrayList<Query>();
+	public final Map<String, Object> readRaw(final Query query,
+			final Object cursor) throws IOException, FreebaseServiceException {
+		final List<Query> queries = new ArrayList<Query>();
 		queries.add(query);
-		
-		List<Object> cursors = new ArrayList<Object>();
+
+		final List<Object> cursors = new ArrayList<Object>();
 		cursors.add(cursor);
-		
-		String envelope = buildReadQueryEnvelope(queries, cursors);
-		String url = getBaseUrl() + "/service/mqlread?queries=" + URLEncoder.encode(envelope, "UTF-8");
-		
-		String response = fetchPage(url);
-		Map<String, Object> data = (Map<String, Object>)parseJSON(response);
-		Map<String, Object> result = (Map<String, Object>)data.get(query.getName());
+
+		final String envelope = buildReadQueryEnvelope(queries, cursors);
+		final String url = getBaseUrl() + "/service/mqlread?queries="
+				+ URLEncoder.encode(envelope, "UTF-8");
+
+		final String response = fetchPage(url);
+		final Map<String, Object> data = (Map<String, Object>) parseJSON(response);
+		final Map<String, Object> result = (Map<String, Object>) data.get(query
+				.getName());
 		parseServiceErrors(query, result);
 		return result;
 	}
-	
-	public Map<String, Object> readRaw(Query query) throws IOException, FreebaseServiceException {
+
+	public final Map<String, Object> readRaw(final Query query)
+			throws IOException, FreebaseServiceException {
 		return readRaw(query, true);
 	}
-	
-	public ResultSet read(Query query) throws IOException {
+
+	public final ResultSet read(final Query query) throws IOException {
 		return read(query, null);
 	}
-	
-	public ResultSet read(Query query, String cursor) throws IOException {
+
+	public final ResultSet read(final Query query, final String cursor)
+			throws IOException {
 		return query.buildResultSet(this);
 	}
-	
-	protected String buildReadQueryEnvelope(List<Query> queries, List<Object> cursors) {
+
+	protected final String buildReadQueryEnvelope(final List<Query> queries,
+			final List<Object> cursors) {
 		String envelope = "{";
-		Iterator<Query> i = queries.iterator();
-		Iterator<Object> j = cursors.iterator();
+		final Iterator<Query> i = queries.iterator();
+		final Iterator<Object> j = cursors.iterator();
 		while (i.hasNext() && j.hasNext()) {
-			Query query = i.next();
-			Object cursor = j.next();
+			final Query query = i.next();
+			final Object cursor = j.next();
 			envelope += "\"" + query.getName() + "\":{";
 			envelope += "\"query\":" + query.toJSON();
 			envelope += ",\"cursor\":";
@@ -70,33 +76,41 @@ public class ReadService extends AbstractFreebaseService {
 			} else {
 				envelope += "\"" + cursor + "\"";
 			}
+
 			envelope += "}";
 			if (i.hasNext()) {
 				envelope += ",";
 			}
 		}
+
 		envelope += "}";
 		return envelope;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public void parseServiceErrors(Query query, Map<String, Object> data) throws FreebaseServiceException {
-		//Map<String, Object> responseData = (Map<String, Object>)response;
-		//Map<String, Object> queryData = responseData; //(Map<String, Object>)responseData.get(query.getName());
-		String responseCode = data.get("code").toString();
+	public final void parseServiceErrors(final Query query,
+			final Map<String, Object> data) throws FreebaseServiceException {
+		// Map<String, Object> responseData = (Map<String, Object>)response;
+		// Map<String, Object> queryData = responseData; //(Map<String,
+		// Object>)responseData.get(query.getName());
+		final String responseCode = data.get("code").toString();
 		if (responseCode.equals("/api/status/error")) {
-			List<Map<String, Object>> messages = (List<Map<String, Object>>)data.get("messages");
-			Map<String, Object> message = messages.get(0);
-			String code = message.get("code").toString();
-			String description = message.get("message").toString();
-			Map<String, Object> info = (Map<String, Object>)message.get("info");
-			String host = null; //info.get("host").toString();
-			int port = 0; //Integer.parseInt(info.get("port").toString());
-			double timeout = 0; //Double.parseDouble(info.get("timeout").toString());
+			final List<Map<String, Object>> messages = (List<Map<String, Object>>) data
+					.get("messages");
+			final Map<String, Object> message = messages.get(0);
+			final String code = message.get("code").toString();
+			final String description = message.get("message").toString();
+			// final Map<String, Object> info = (Map<String, Object>)
+			// message.get("info");
+			final String host = null; // info.get("host").toString();
+			final int port = 0; // Integer.parseInt(info.get("port").toString());
+			final double timeout = 0; // Double.parseDouble(info.get("timeout").toString());
 			if (code.equals(FreebaseServiceTimeoutException.ERRORCODE)) {
-				throw new FreebaseServiceTimeoutException(description, host, port, timeout);
+				throw new FreebaseServiceTimeoutException(description, host,
+						port, timeout);
 			} else {
-				throw new FreebaseServiceException(code, description, host, port, timeout);
+				throw new FreebaseServiceException(code, description, host,
+						port, timeout);
 			}
 		}
 	}

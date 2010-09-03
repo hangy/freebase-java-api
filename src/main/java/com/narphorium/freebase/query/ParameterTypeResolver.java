@@ -20,10 +20,13 @@ import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class ParameterTypeResolver {
 
-	private static final Log LOG = LogFactory.getLog(ParameterTypeResolver.class);
-	private static Pattern parameterNamePattern = Pattern.compile("([\\d\\w_]+):([\\d\\w_]+)");
-	private static Matcher parameterNameMatcher = parameterNamePattern.matcher("");
-	
+	private static final Log LOG = LogFactory
+			.getLog(ParameterTypeResolver.class);
+	private static Pattern parameterNamePattern = Pattern
+			.compile("([\\d\\w_]+):([\\d\\w_]+)");
+	private static Matcher parameterNameMatcher = parameterNamePattern
+			.matcher("");
+
 	private static Map<String, String> objectProperties = new HashMap<String, String>();
 	static {
 		objectProperties.put("id", "/type/id");
@@ -36,7 +39,7 @@ public class ParameterTypeResolver {
 		objectProperties.put("creator", "/type/user");
 		objectProperties.put("attribution", "/type/attribution");
 	}
-	
+
 	private static Set<String> mqlReservedWords = new HashSet<String>();
 	static {
 		mqlReservedWords.add("return");
@@ -52,43 +55,45 @@ public class ParameterTypeResolver {
 		mqlReservedWords.add("timestamp");
 		mqlReservedWords.add("cursor");
 	}
-	
+
 	private static Map<String, String> expectedTypeByProperty = new HashMap<String, String>();
 	private Query expectedTypeQuery;
-	
+
 	private ReadService readService;
-	private QueryParser queryParser;
-	public ParameterTypeResolver(ReadService readService) {
+
+	public ParameterTypeResolver(final ReadService readService) {
 		this.readService = readService;
-		this.queryParser = new QueryParser();
-		this.expectedTypeQuery = this.queryParser.parse("q1","{\"property_id:id\":null,\"type\":\"/type/property\",\"expected_type:expected_type\":null}");
+		this.expectedTypeQuery = new QueryParser()
+				.parse("q1",
+						"{\"property_id:id\":null,\"type\":\"/type/property\",\"expected_type:expected_type\":null}");
 	}
-	
-	public void process(Query query) {
+
+	public final void process(final Query query) {
 		processData(query, query.getData(), "/type/object");
 	}
 
-
 	@SuppressWarnings("unchecked")
-	private void processData(Query query, Object data, String expectedType) {
-		
+	private void processData(final Query query, final Object data,
+			final String expectedType) {
+		String ept = expectedType;
+
 		if (data == null) {
 			return;
 		} else if (data instanceof List) {
-			for (Object element : (List<Object>)data) {
-				processData(query, element, expectedType);
+			for (Object element : (List<Object>) data) {
+				processData(query, element, ept);
 			}
 		} else if (data instanceof Map) {
-			Map<String, Object> mapData = (Map<String, Object>)data;
+			Map<String, Object> mapData = (Map<String, Object>) data;
 			if (mapData.containsKey("type")) {
 				Object type = mapData.get("type");
 				if (type instanceof String) {
-					expectedType = (String)type;
+					ept = (String) type;
 				} else if (type instanceof Map) {
-					expectedType = ((Map<String,String>)type).get("id");
+					ept = ((Map<String, String>) type).get("id");
 				}
 			}
-			for (String key : mapData.keySet()){
+			for (String key : mapData.keySet()) {
 				Object value = mapData.get(key);
 				String childExpectedType = "/type/object";
 
@@ -96,13 +101,13 @@ public class ParameterTypeResolver {
 				if (parameterNameMatcher.matches()) {
 					String name = parameterNameMatcher.group(1);
 					String id = parameterNameMatcher.group(2);
-					childExpectedType = lookupExpectedType(id, expectedType);
+					childExpectedType = lookupExpectedType(id, ept);
 					Parameter parameter = query.getParameter(name);
 					if (parameter != null) {
-						 parameter.setExpectedType(childExpectedType);
+						parameter.setExpectedType(childExpectedType);
 					}
 				} else if (!mqlReservedWords.contains(key)) {
-					childExpectedType = lookupExpectedType(key, expectedType);
+					childExpectedType = lookupExpectedType(key, ept);
 				}
 				processData(query, value, childExpectedType);
 			}

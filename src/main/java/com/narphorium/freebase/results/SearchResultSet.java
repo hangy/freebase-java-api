@@ -1,5 +1,5 @@
 package com.narphorium.freebase.results;
 
-public class SearchResultSet  {
+public class SearchResultSet {
 
 }

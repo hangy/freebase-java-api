@@ -5,12 +5,13 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ReconciliationResultSet implements Iterable<ReconciliationResult> {
-	
-	private List<ReconciliationResult> results = new ArrayList<ReconciliationResult>();
 
-	public ReconciliationResultSet() {}
-	
-	public ReconciliationResultSet(List<ReconciliationResult> results) {
+	private final List<ReconciliationResult> results = new ArrayList<ReconciliationResult>();
+
+	public ReconciliationResultSet() {
+	}
+
+	public ReconciliationResultSet(final List<ReconciliationResult> results) {
 		this.results.addAll(results);
 	}
 

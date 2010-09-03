@@ -94,7 +94,7 @@ public class AbstractFreebaseService {
 	public final String touch() {
 		String result = "";
 
-		HttpPost method = new HttpPost(this.baseUrl + "/service/touch");
+		final HttpPost method = new HttpPost(this.baseUrl + "/service/touch");
 		method.addHeader("User-Agent", USER_AGENT);
 		method.addHeader("X-Metaweb-Request", "");
 
@@ -108,7 +108,7 @@ public class AbstractFreebaseService {
 
 		LOG.debug("URL: " + formattedUrl);
 
-		HttpGet method = new HttpGet(formattedUrl);
+		final HttpGet method = new HttpGet(formattedUrl);
 		method.addHeader("User-Agent", USER_AGENT);
 
 		content = getExecutionResult(method);
@@ -121,12 +121,12 @@ public class AbstractFreebaseService {
 			final Map<String, String> content) {
 		String result = "";
 
-		HttpPost method = new HttpPost(url.toString());
+		final HttpPost method = new HttpPost(url.toString());
 		method.addHeader("User-Agent", USER_AGENT);
 		method.addHeader("X-Metaweb-Request", "");
 
-		List<NameValuePair> httpParams = new ArrayList<NameValuePair>(content
-				.keySet().size());
+		final List<NameValuePair> httpParams = new ArrayList<NameValuePair>(
+				content.keySet().size());
 		for (final String parameter : content.keySet()) {
 			httpParams.add(new BasicNameValuePair(parameter, content
 					.get(parameter)));
@@ -135,7 +135,7 @@ public class AbstractFreebaseService {
 		try {
 			method.setEntity(new UrlEncodedFormEntity(httpParams, HTTP.UTF_8));
 			result = getExecutionResult(method);
-		} catch (UnsupportedEncodingException e) {
+		} catch (final UnsupportedEncodingException e) {
 			LOG.error(e.getMessage(), e);
 		}
 
@@ -159,7 +159,7 @@ public class AbstractFreebaseService {
 		String result = "";
 
 		try {
-			ResponseHandler<String> handler = new ResponseHandler<String>() {
+			final ResponseHandler<String> handler = new ResponseHandler<String>() {
 				public String handleResponse(HttpResponse response)
 						throws IOException {
 					final int status = response.getStatusLine().getStatusCode();
@@ -179,7 +179,7 @@ public class AbstractFreebaseService {
 			};
 
 			result = executeHttpRequest(request, handler);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			LOG.error(e.getMessage(), e);
 		}
 

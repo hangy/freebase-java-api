@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class JsonPath {
 
-	private List<Object> elements = new ArrayList<Object>();
+	private final List<Object> elements = new ArrayList<Object>();
 
 	public JsonPath() {
 	}
@@ -18,32 +18,32 @@ public class JsonPath {
 	 * }
 	 */
 
-	public JsonPath(JsonPath path) {
+	public JsonPath(final JsonPath path) {
 		this.elements.addAll(path.elements);
 	}
 
-	public void addElement(Object element) {
+	public final void addElement(final Object element) {
 		elements.add(element);
 	}
 
 	@SuppressWarnings("unchecked")
-	public Object getValue(Object data) {
-		List<Object> parameterResults = new ArrayList<Object>();
+	public final Object getValue(final Object data) {
+		Object d = data;
+		final List<Object> parameterResults = new ArrayList<Object>();
 
 		boolean found = true;
-		for (Object key : elements) {
-			if (key instanceof String && data instanceof Map) {
-				data = ((Map<String, Object>) data).get((String) key);
-			} else if (key instanceof Integer && data instanceof List) {
-				data = ((List<Object>) data).get((Integer) key);
+		for (final Object key : elements) {
+			if (key instanceof String && d instanceof Map) {
+				d = ((Map<String, Object>) d).get((String) key);
+			} else if (key instanceof Integer && d instanceof List) {
+				d = ((List<Object>) d).get((Integer) key);
 			} else {
 				found = false;
 			}
-			// System.out.println("PARAM " + name + " : " + key + " => " +
-			// resultData);
 		}
+
 		if (found) {
-			parameterResults.add(data);
+			parameterResults.add(d);
 		}
 
 		return parameterResults.size() == 1 ? parameterResults.get(0)
@@ -51,26 +51,26 @@ public class JsonPath {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void setValue(Object data, Object value) {
-		for (int k = 0; k < elements.size(); k++) {
-			Object key = elements.get(k);
+	public final void setValue(final Object data, final Object value) {
+		Object d = data;
+
+		for (int k = 0; k < elements.size(); ++k) {
+			final Object key = elements.get(k);
 			if (key instanceof String) {
 				if (k < elements.size() - 1) {
-					data = ((Map<String, Object>) data).get((String) key);
+					d = ((Map<String, Object>) d).get((String) key);
 				} else {
-					((Map<String, Object>) data).put((String) key, value);
+					((Map<String, Object>) d).put((String) key, value);
 				}
 			} else if (key instanceof Integer) {
-				data = ((List<Object>) data).get((Integer) key);
+				d = ((List<Object>) d).get((Integer) key);
 			}
-			// System.out.println("PARAM " + name + " : " + key + " => " +
-			// currentData);
 		}
 	}
 
-	public String toString() {
-		StringBuffer path = new StringBuffer();
-		for (Object element : elements) {
+	public final String toString() {
+		final StringBuffer path = new StringBuffer();
+		for (final Object element : elements) {
 			if (element instanceof Integer) {
 				path.append('[');
 				path.append(element);

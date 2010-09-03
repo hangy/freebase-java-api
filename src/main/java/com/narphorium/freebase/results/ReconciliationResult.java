@@ -3,7 +3,7 @@ package com.narphorium.freebase.results;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReconciliationResult  {
+public class ReconciliationResult {
 
 	private String id;
 	private List<String> names = new ArrayList<String>();
@@ -11,8 +11,9 @@ public class ReconciliationResult  {
 	private List<String> types = new ArrayList<String>();
 	private double score;
 	private boolean match;
-	
-	public ReconciliationResult(String id, List<String> names, List<String> types, Double score, boolean match) {
+
+	public ReconciliationResult(final String id, final List<String> names,
+			final List<String> types, final Double score, final boolean match) {
 		this.id = id;
 		this.names = names;
 		this.types = types;
@@ -24,7 +25,7 @@ public class ReconciliationResult  {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -32,7 +33,7 @@ public class ReconciliationResult  {
 		return score;
 	}
 
-	public void setScore(double score) {
+	public void setScore(final double score) {
 		this.score = score;
 	}
 
@@ -40,7 +41,7 @@ public class ReconciliationResult  {
 		return match;
 	}
 
-	public void setMatch(boolean match) {
+	public void setMatch(final boolean match) {
 		this.match = match;
 	}
 

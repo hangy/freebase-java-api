@@ -12,15 +12,15 @@ public class SearchService extends AbstractFreebaseService {
 	public SearchService(final HttpClient httpClient) {
 		super(httpClient);
 	}
-	
+
 	public SearchService(final URL baseUrl, final HttpClient httpClient) {
 		super(baseUrl, httpClient);
 	}
 
 	// TODO
-	
-	public SearchResultSet search(final String query) throws FreebaseServiceException {
+	public final SearchResultSet search(final String query)
+			throws FreebaseServiceException {
 		return null;
 	}
-	
+
 }
