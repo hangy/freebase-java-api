@@ -69,7 +69,7 @@ public class JsonPath {
 	}
 
 	public final String toString() {
-		final StringBuffer path = new StringBuffer();
+		final StringBuilder path = new StringBuilder();
 		for (final Object element : elements) {
 			if (element instanceof Integer) {
 				path.append('[');

@@ -19,38 +19,39 @@ public class DefaultResult implements Result {
 
 	private static final Log LOG = LogFactory.getLog(DefaultResult.class);
 	private static final String DATEFORMAT = "yyyy-mm-dd";
-	
+
 	private Query query;
 	private Object jsonData;
 
-	public DefaultResult(Query query, Object jsonData) {
+	public DefaultResult(final Query query, final Object jsonData) {
 		this.query = new DefaultQuery(query);
 		this.jsonData = jsonData;
 	}
-	
-	public Object getObject(JsonPath path) {
-		return (Object)path.getValue(jsonData);
+
+	public Object getObject(final JsonPath path) {
+		return (Object) path.getValue(jsonData);
 	}
 
-	public Object getObject(String variable) {
-		Parameter parameter = query.getParameter(variable);
+	public Object getObject(final String variable) {
+		final Parameter parameter = query.getParameter(variable);
 		if (parameter == null) {
 			LOG.error("Parameter \"" + variable + "\" does not exist.");
 			return null;
 		}
+
 		return getObject(parameter.getPath());
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<Object> getCollection(String variable) {
-		return (List<Object>)getObject(variable);
+	public List<Object> getCollection(final String variable) {
+		return (List<Object>) getObject(variable);
 	}
 
-	public boolean getBoolean(String variable) {
-		return (Boolean)getObject(variable);
+	public boolean getBoolean(final String variable) {
+		return (Boolean) getObject(variable);
 	}
 
-	public Date getDate(String variable) {
+	public Date getDate(final String variable) {
 		final DateFormat dateFormat = getDateFormat();
 		try {
 			return dateFormat.parse(getString(variable));
@@ -60,24 +61,24 @@ public class DefaultResult implements Result {
 		return null;
 	}
 
-	public float getFloat(String variable) {
-		return (Float)getObject(variable);
+	public float getFloat(final String variable) {
+		return (Float) getObject(variable);
 	}
 
-	public int getInteger(String variable) {
-		return (Integer)getObject(variable);
+	public int getInteger(final String variable) {
+		return (Integer) getObject(variable);
 	}
 
-	public String getString(String variable) {
-		return (String)getObject(variable);
+	public String getString(final String variable) {
+		return (String) getObject(variable);
 	}
 
 	public Query getQuery() {
 		return query;
 	}
-	
+
 	private static DateFormat getDateFormat() {
 		return new SimpleDateFormat(DATEFORMAT, Locale.ROOT);
 	}
-	
+
 }

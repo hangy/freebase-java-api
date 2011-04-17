@@ -42,7 +42,7 @@ public class QueryParser {
 	public final Query parse(final File queryFile) {
 		final String name = queryFile.getName().substring(0,
 				queryFile.getName().lastIndexOf('.'));
-		final StringBuffer queryString = new StringBuffer();
+		final StringBuilder queryString = new StringBuilder();
 		try {
 			final BufferedReader reader = new BufferedReader(new FileReader(
 					queryFile));
