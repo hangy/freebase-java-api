@@ -24,7 +24,7 @@ public abstract class AbstractResultSet implements ResultSet {
 	private Object cursor;
 	private int numPages;
 	private boolean fetchedFirstPage;
-
+	
 	public AbstractResultSet(final Query query, final ReadService readService) {
 		this.readService = readService;
 		this.query = new DefaultQuery(query);
@@ -79,7 +79,7 @@ public abstract class AbstractResultSet implements ResultSet {
 
 		return currentResult < results.size() - 1;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	protected void fetchNextPage() throws FreebaseServiceException {
 		try {

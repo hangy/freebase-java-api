@@ -62,29 +62,28 @@ public class ReadService extends AbstractFreebaseService {
 
 	protected final String buildReadQueryEnvelope(final List<Query> queries,
 			final List<Object> cursors) {
-		String envelope = "{";
+		final StringBuilder envelope = new StringBuilder("{");
 		final Iterator<Query> i = queries.iterator();
 		final Iterator<Object> j = cursors.iterator();
 		while (i.hasNext() && j.hasNext()) {
 			final Query query = i.next();
 			final Object cursor = j.next();
-			envelope += "\"" + query.getName() + "\":{";
-			envelope += "\"query\":" + query.toJSON();
-			envelope += ",\"cursor\":";
+			envelope.append("\"").append(query.getName()).append("\":{");
+			envelope.append("\"query\":").append(query.toJSON());
+			envelope.append(",\"cursor\":");
 			if (cursor instanceof Boolean) {
-				envelope += cursor.toString();
+				envelope.append(cursor.toString());
 			} else {
-				envelope += "\"" + cursor + "\"";
+				envelope.append("\"").append(cursor).append("\"");
 			}
 
-			envelope += "}";
+			envelope.append("}");
 			if (i.hasNext()) {
-				envelope += ",";
+				envelope.append(",");
 			}
 		}
 
-		envelope += "}";
-		return envelope;
+		return envelope.append("}").toString();
 	}
 
 	@SuppressWarnings("unchecked")

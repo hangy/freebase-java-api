@@ -24,6 +24,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
@@ -47,6 +48,8 @@ public class AbstractFreebaseService {
 	private final CookieStore cookieStore = new BasicCookieStore();
 
 	private URL baseUrl;
+	private int maximumRetries = 3;
+	private int currentTry = Integer.MIN_VALUE;
 
 	protected AbstractFreebaseService(final HttpClient httpClient) {
 		try {
@@ -84,6 +87,18 @@ public class AbstractFreebaseService {
 		return baseUrl;
 	}
 
+	public final int getMaximumRetries() {
+		return maximumRetries;
+	}
+	
+	public final void setMaximumRetries(final int maximumRetries) {
+		if (1 > maximumRetries) {
+			throw new IllegalArgumentException("maximumRetries must be 1 or higher");
+		}
+		
+		this.maximumRetries = maximumRetries;
+	}
+	
 	/**
 	 * Resets the <code>mwLastWriteTime</code> cookie to the current time. This
 	 * ensures that any requests from the time you use this service gets you the
@@ -96,9 +111,7 @@ public class AbstractFreebaseService {
 		String result = "";
 
 		final HttpPost method = new HttpPost(this.baseUrl + "/service/touch");
-		method.addHeader("User-Agent", USER_AGENT);
-		method.addHeader("X-Metaweb-Request", "");
-		method.addHeader("Accept-Charset", "utf-8");
+		addDefaultHeaders(method);
 
 		result = getExecutionResult(method);
 		return result;
@@ -113,17 +126,14 @@ public class AbstractFreebaseService {
 	}
 
 	protected final String fetchPage(final String url) throws IOException {
-		String content = "";
 		final String formattedUrl = url.replaceAll(" ", "%20");
 
 		LOG.debug("URL: " + formattedUrl);
 
 		final HttpGet method = new HttpGet(formattedUrl);
-		method.addHeader("User-Agent", USER_AGENT);
-		method.addHeader("X-Metaweb-Request", "");
-		method.addHeader("Accept-Charset", "utf-8");
+		addDefaultHeaders(method);
 
-		content = getExecutionResult(method);
+		final String content = getExecutionResult(method);
 		LOG.debug(content);
 
 		return content;
@@ -131,12 +141,8 @@ public class AbstractFreebaseService {
 
 	protected final String postContent(final URL url,
 			final Map<String, String> content) {
-		String result = "";
-
 		final HttpPost method = new HttpPost(url.toString());
-		method.addHeader("User-Agent", USER_AGENT);
-		method.addHeader("X-Metaweb-Request", "");
-		method.addHeader("Accept-Charset", "utf-8");
+		addDefaultHeaders(method);
 
 		final List<NameValuePair> httpParams = new ArrayList<NameValuePair>(
 				content.keySet().size());
@@ -147,12 +153,13 @@ public class AbstractFreebaseService {
 
 		try {
 			method.setEntity(new UrlEncodedFormEntity(httpParams, HTTP.UTF_8));
-			result = getExecutionResult(method);
+			final String result = getExecutionResult(method);
+			LOG.debug(content);
+			return result;
 		} catch (final UnsupportedEncodingException e) {
 			LOG.error(e.getMessage(), e);
+			return "";
 		}
-
-		return result;
 	}
 
 	protected final <T> T executeHttpRequest(HttpUriRequest request,
@@ -160,16 +167,27 @@ public class AbstractFreebaseService {
 		return httpClient.execute(request, responseHandler, localContext);
 	}
 
-	private String getExecutionResult(final HttpUriRequest request) {
-		String result = "";
-
+	private synchronized String getExecutionResult(final HttpUriRequest request) {
 		try {
+			currentTry = 0;
 			final ResponseHandler<String> handler = new ResponseHandler<String>() {
 				public String handleResponse(HttpResponse response)
 						throws IOException {
+					++currentTry;
 					final int status = response.getStatusLine().getStatusCode();
 
-					if (status != HttpStatus.SC_OK) {
+					if (HttpStatus.SC_UNAUTHORIZED == status) {
+						if (currentTry >= maximumRetries) {
+							throw new IOException(status + ": "
+									+ response.getStatusLine().getReasonPhrase()
+									+ " (after " + currentTry + " retries)");
+						}
+						
+						// TODO: re-authenticate.
+						return executeHttpRequest(request, this);
+					}
+					
+					if (HttpStatus.SC_OK != status) {
 						throw new IOException(status + ": "
 								+ response.getStatusLine().getReasonPhrase());
 					}
@@ -187,12 +205,22 @@ public class AbstractFreebaseService {
 				}
 			};
 
-			result = executeHttpRequest(request, handler);
+			final String result = executeHttpRequest(request, handler);
+			LOG.debug(result);
+			return result;
 		} catch (final IOException e) {
 			LOG.error(e.getMessage(), e);
+			return "";
 		}
-
-		return result;
+		finally {
+			currentTry = Integer.MIN_VALUE;
+		}
+	}
+	
+	private static void addDefaultHeaders(final AbstractHttpMessage message) {
+		message.addHeader("User-Agent", USER_AGENT);
+		message.addHeader("X-Metaweb-Request", "");
+		message.addHeader("Accept-Charset", "utf-8");
 	}
 
 }
