@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -38,12 +39,12 @@ public class AbstractFreebaseService {
 	private static final Log LOG = LogFactory
 			.getLog(AbstractFreebaseService.class);
 
+	private static final JSONReader jsonParser = new JSONReader();
+	private static final JSONWriter jsonWriter = new JSONWriter();
+	
 	private final HttpClient httpClient;
 	private final HttpContext localContext = new BasicHttpContext();
 	private final CookieStore cookieStore = new BasicCookieStore();
-
-	private final JSONReader jsonParser = new JSONReader();
-	private final JSONWriter jsonWriter = new JSONWriter();
 
 	private URL baseUrl;
 
@@ -97,9 +98,18 @@ public class AbstractFreebaseService {
 		final HttpPost method = new HttpPost(this.baseUrl + "/service/touch");
 		method.addHeader("User-Agent", USER_AGENT);
 		method.addHeader("X-Metaweb-Request", "");
+		method.addHeader("Accept-Charset", "utf-8");
 
 		result = getExecutionResult(method);
 		return result;
+	}
+
+	protected static final Object parseJSON(String results) throws IOException {
+		return jsonParser.read(results);
+	}
+
+	protected static final String generateJSON(Object object) {
+		return jsonWriter.write(object);
 	}
 
 	protected final String fetchPage(final String url) throws IOException {
@@ -110,6 +120,8 @@ public class AbstractFreebaseService {
 
 		final HttpGet method = new HttpGet(formattedUrl);
 		method.addHeader("User-Agent", USER_AGENT);
+		method.addHeader("X-Metaweb-Request", "");
+		method.addHeader("Accept-Charset", "utf-8");
 
 		content = getExecutionResult(method);
 		LOG.debug(content);
@@ -124,6 +136,7 @@ public class AbstractFreebaseService {
 		final HttpPost method = new HttpPost(url.toString());
 		method.addHeader("User-Agent", USER_AGENT);
 		method.addHeader("X-Metaweb-Request", "");
+		method.addHeader("Accept-Charset", "utf-8");
 
 		final List<NameValuePair> httpParams = new ArrayList<NameValuePair>(
 				content.keySet().size());
@@ -140,14 +153,6 @@ public class AbstractFreebaseService {
 		}
 
 		return result;
-	}
-
-	protected final Object parseJSON(String results) throws IOException {
-		return jsonParser.read(results);
-	}
-
-	protected final String generateJSON(Object object) {
-		return jsonWriter.write(object);
 	}
 
 	protected final <T> T executeHttpRequest(HttpUriRequest request,
@@ -170,6 +175,10 @@ public class AbstractFreebaseService {
 					}
 
 					final HttpEntity entity = response.getEntity();
+					for (final Header header : response.getAllHeaders()) {
+						LOG.info(header);
+					}
+					 
 					if (entity != null) {
 						return EntityUtils.toString(entity, "utf8");
 					} else {

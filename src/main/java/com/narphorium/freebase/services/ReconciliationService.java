@@ -50,7 +50,7 @@ public class ReconciliationService extends AbstractFreebaseService {
 		return new ReconciliationResultSet();
 	}
 
-	private String buildQuery(final Map<String, Object> values) {
+	private static String buildQuery(final Map<String, Object> values) {
 		return generateJSON(values);
 	}
 
