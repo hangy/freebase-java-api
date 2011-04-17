@@ -34,7 +34,7 @@ public class JsonPath {
 		boolean found = true;
 		for (final Object key : elements) {
 			if (key instanceof String && d instanceof Map) {
-				d = ((Map<String, Object>) d).get((String) key);
+				d = ((Map<String, Object>) d).get(key);
 			} else if (key instanceof Integer && d instanceof List) {
 				d = ((List<Object>) d).get((Integer) key);
 			} else {
@@ -58,7 +58,7 @@ public class JsonPath {
 			final Object key = elements.get(k);
 			if (key instanceof String) {
 				if (k < elements.size() - 1) {
-					d = ((Map<String, Object>) d).get((String) key);
+					d = ((Map<String, Object>) d).get(key);
 				} else {
 					((Map<String, Object>) d).put((String) key, value);
 				}
@@ -68,6 +68,7 @@ public class JsonPath {
 		}
 	}
 
+	@Override
 	public final String toString() {
 		final StringBuilder path = new StringBuilder();
 		for (final Object element : elements) {

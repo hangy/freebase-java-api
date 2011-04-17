@@ -88,7 +88,7 @@ public abstract class AbstractResultSet implements ResultSet {
 			// Map<String, Object> data = (Map<String,
 			// Object>)parser.read(response);
 			// readService.parseServiceErrors(data);
-			final Map<String, Object> q = (Map<String, Object>) readService
+			final Map<String, Object> q = readService
 					.readRaw(query, cursor);
 
 			// Map<String, Object> q = (Map<String,

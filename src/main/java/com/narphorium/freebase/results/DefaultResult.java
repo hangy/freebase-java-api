@@ -29,7 +29,7 @@ public class DefaultResult implements Result {
 	}
 
 	public Object getObject(final JsonPath path) {
-		return (Object) path.getValue(jsonData);
+		return path.getValue(jsonData);
 	}
 
 	public Object getObject(final String variable) {
