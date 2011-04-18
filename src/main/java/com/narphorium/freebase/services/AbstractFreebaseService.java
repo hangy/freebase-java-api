@@ -42,8 +42,8 @@ public class AbstractFreebaseService {
 	private static final Log LOG = LogFactory
 			.getLog(AbstractFreebaseService.class);
 
-	private static final JSONReader jsonParser = new JSONReader();
-	private static final JSONWriter jsonWriter = new JSONWriter();
+	private static final JSONReader JSON_PARSER = new JSONReader();
+	private static final JSONWriter JSON_WRITER = new JSONWriter();
 
 	private final Authorizer authorizer;
 
@@ -131,11 +131,11 @@ public class AbstractFreebaseService {
 	}
 
 	protected static final Object parseJSON(String results) throws IOException {
-		return jsonParser.read(results);
+		return JSON_PARSER.read(results);
 	}
 
 	protected static final String generateJSON(Object object) {
-		return jsonWriter.write(object);
+		return JSON_WRITER.write(object);
 	}
 
 	protected final String fetchPage(final String url) throws IOException {
