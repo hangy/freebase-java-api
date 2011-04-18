@@ -39,6 +39,9 @@ public class AbstractFreebaseService {
 
 	protected static final String USER_AGENT = "Freebase Java API ("
 			+ System.getProperty("os.name") + ")";
+
+	private static final int MAXIMUM_RETRIES = 3;
+
 	private static final Log LOG = LogFactory
 			.getLog(AbstractFreebaseService.class);
 
@@ -52,7 +55,7 @@ public class AbstractFreebaseService {
 	private final CookieStore cookieStore = new BasicCookieStore();
 
 	private URL baseUrl;
-	private int maximumRetries = 3;
+	private int maximumRetries = MAXIMUM_RETRIES;
 	private int currentTry = Integer.MIN_VALUE;
 
 	protected AbstractFreebaseService(final Authorizer authorizer,
