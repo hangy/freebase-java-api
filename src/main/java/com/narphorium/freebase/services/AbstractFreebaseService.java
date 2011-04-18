@@ -33,6 +33,8 @@ import org.apache.http.util.EntityUtils;
 import org.stringtree.json.JSONReader;
 import org.stringtree.json.JSONWriter;
 
+import com.narphorium.freebase.auth.Authorizer;
+
 public class AbstractFreebaseService {
 
 	protected static final String USER_AGENT = "Freebase Java API ("
@@ -42,7 +44,9 @@ public class AbstractFreebaseService {
 
 	private static final JSONReader jsonParser = new JSONReader();
 	private static final JSONWriter jsonWriter = new JSONWriter();
-	
+
+	private final Authorizer authorizer;
+
 	private final HttpClient httpClient;
 	private final HttpContext localContext = new BasicHttpContext();
 	private final CookieStore cookieStore = new BasicCookieStore();
@@ -51,26 +55,36 @@ public class AbstractFreebaseService {
 	private int maximumRetries = 3;
 	private int currentTry = Integer.MIN_VALUE;
 
-	protected AbstractFreebaseService(final HttpClient httpClient) {
+	protected AbstractFreebaseService(final Authorizer authorizer,
+			final HttpClient httpClient) {
 		try {
 			baseUrl = new URL("http://www.freebase.com/api");
 		} catch (MalformedURLException e) {
 			LOG.error(e.getMessage(), e);
 		}
 
+		if (null == authorizer) {
+			throw new IllegalArgumentException("authorizer cannot be null");
+		}
+
 		if (null == httpClient) {
 			throw new IllegalArgumentException("httpClient cannot be null");
 		}
 
+		this.authorizer = authorizer;
 		this.httpClient = httpClient;
 		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
 				this.cookieStore);
 	}
 
 	public AbstractFreebaseService(final URL baseUrl,
-			final HttpClient httpClient) {
+			final Authorizer authorizer, final HttpClient httpClient) {
 		if (null == baseUrl) {
 			throw new IllegalArgumentException("baseUrl cannot be null");
+		}
+
+		if (null == authorizer) {
+			throw new IllegalArgumentException("authorizer cannot be null");
 		}
 
 		if (null == httpClient) {
@@ -78,6 +92,7 @@ public class AbstractFreebaseService {
 		}
 
 		this.baseUrl = baseUrl;
+		this.authorizer = authorizer;
 		this.httpClient = httpClient;
 		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
 				this.cookieStore);
@@ -90,15 +105,16 @@ public class AbstractFreebaseService {
 	public final int getMaximumRetries() {
 		return maximumRetries;
 	}
-	
+
 	public final void setMaximumRetries(final int maximumRetries) {
 		if (1 > maximumRetries) {
-			throw new IllegalArgumentException("maximumRetries must be 1 or higher");
+			throw new IllegalArgumentException(
+					"maximumRetries must be 1 or higher");
 		}
-		
+
 		this.maximumRetries = maximumRetries;
 	}
-	
+
 	/**
 	 * Resets the <code>mwLastWriteTime</code> cookie to the current time. This
 	 * ensures that any requests from the time you use this service gets you the
@@ -108,13 +124,10 @@ public class AbstractFreebaseService {
 	 * @return The Freebase.com response
 	 */
 	public final String touch() {
-		String result = "";
-
 		final HttpPost method = new HttpPost(this.baseUrl + "/service/touch");
 		addDefaultHeaders(method);
 
-		result = getExecutionResult(method);
-		return result;
+		return getExecutionResult(method);
 	}
 
 	protected static final Object parseJSON(String results) throws IOException {
@@ -178,15 +191,17 @@ public class AbstractFreebaseService {
 
 					if (HttpStatus.SC_UNAUTHORIZED == status) {
 						if (currentTry >= maximumRetries) {
-							throw new IOException(status + ": "
-									+ response.getStatusLine().getReasonPhrase()
-									+ " (after " + currentTry + " retries)");
+							throw new IOException(status
+									+ ": "
+									+ response.getStatusLine()
+											.getReasonPhrase() + " (after "
+									+ currentTry + " retries)");
 						}
-						
-						// TODO: re-authenticate.
+
+						authorizer.refresh();
 						return executeHttpRequest(request, this);
 					}
-					
+
 					if (HttpStatus.SC_OK != status) {
 						throw new IOException(status + ": "
 								+ response.getStatusLine().getReasonPhrase());
@@ -196,7 +211,7 @@ public class AbstractFreebaseService {
 					for (final Header header : response.getAllHeaders()) {
 						LOG.info(header);
 					}
-					 
+
 					if (entity != null) {
 						return EntityUtils.toString(entity, "utf8");
 					} else {
@@ -211,12 +226,11 @@ public class AbstractFreebaseService {
 		} catch (final IOException e) {
 			LOG.error(e.getMessage(), e);
 			return "";
-		}
-		finally {
+		} finally {
 			currentTry = Integer.MIN_VALUE;
 		}
 	}
-	
+
 	private static void addDefaultHeaders(final AbstractHttpMessage message) {
 		message.addHeader("User-Agent", USER_AGENT);
 		message.addHeader("X-Metaweb-Request", "");

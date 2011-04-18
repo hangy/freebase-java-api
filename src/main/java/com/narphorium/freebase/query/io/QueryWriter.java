@@ -24,32 +24,37 @@ public class QueryWriter {
 	private String writeNode(final Object root, final String offset,
 			final boolean withholdStartOffset) {
 		if (root instanceof List) {
-			final StringBuilder result = new StringBuilder(withholdStartOffset ? "" : offset).append("[").append(newline);
+			final StringBuilder result = new StringBuilder(
+					withholdStartOffset ? "" : offset).append("[").append(
+					newline);
 			final List<Object> list = (List<Object>) root;
 			for (Iterator<Object> i = list.iterator(); i.hasNext();) {
 				result.append(writeNode(i.next(), offset + indent, false));
 				if (i.hasNext()) {
 					result.append(",");
 				}
-				
+
 				result.append(newline);
 			}
-			
+
 			return result.append("]").toString();
 		} else if (root instanceof Map) {
-			final StringBuilder result = new StringBuilder(withholdStartOffset ? "" : offset).append("{").append(newline);
+			final StringBuilder result = new StringBuilder(
+					withholdStartOffset ? "" : offset).append("{").append(
+					newline);
 			Map<String, Object> map = (Map<String, Object>) root;
 			for (Iterator<String> i = map.keySet().iterator(); i.hasNext();) {
 				final String key = i.next();
-				result.append(offset).append(indent).append("\"").append(key).append("\" : ")
+				result.append(offset).append(indent).append("\"").append(key)
+						.append("\" : ")
 						.append(writeNode(map.get(key), offset + indent, true));
 				if (i.hasNext()) {
 					result.append(",");
 				}
-				
+
 				result.append(newline);
 			}
-			
+
 			return result.append(offset).append("}").toString();
 		} else if (root == null) {
 			return "null";

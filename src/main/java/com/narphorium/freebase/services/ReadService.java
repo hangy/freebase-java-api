@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.apache.http.client.HttpClient;
 
+import com.narphorium.freebase.auth.Authorizer;
 import com.narphorium.freebase.query.Query;
 import com.narphorium.freebase.results.ResultSet;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
@@ -17,12 +18,13 @@ import com.narphorium.freebase.services.exceptions.FreebaseServiceTimeoutExcepti
 
 public class ReadService extends AbstractFreebaseService {
 
-	public ReadService(final HttpClient httpClient) {
-		super(httpClient);
+	public ReadService(final Authorizer authorizer, final HttpClient httpClient) {
+		super(authorizer, httpClient);
 	}
 
-	public ReadService(final URL baseUrl, final HttpClient httpClient) {
-		super(baseUrl, httpClient);
+	public ReadService(final URL baseUrl, final Authorizer authorizer,
+			final HttpClient httpClient) {
+		super(baseUrl, authorizer, httpClient);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.HttpClient;
 
+import com.narphorium.freebase.auth.Authorizer;
 import com.narphorium.freebase.results.ReconciliationResult;
 import com.narphorium.freebase.results.ReconciliationResultSet;
 
@@ -19,12 +20,14 @@ public class ReconciliationService extends AbstractFreebaseService {
 	private static final Log LOG = LogFactory
 			.getLog(ReconciliationService.class);
 
-	public ReconciliationService(final HttpClient httpClient) {
-		super(httpClient);
+	public ReconciliationService(final Authorizer authorizer,
+			final HttpClient httpClient) {
+		super(authorizer, httpClient);
 	}
 
-	public ReconciliationService(final URL baseUrl, final HttpClient httpClient) {
-		super(baseUrl, httpClient);
+	public ReconciliationService(final URL baseUrl,
+			final Authorizer authorizer, final HttpClient httpClient) {
+		super(baseUrl, authorizer, httpClient);
 	}
 
 	public final ReconciliationResultSet reconcile(
