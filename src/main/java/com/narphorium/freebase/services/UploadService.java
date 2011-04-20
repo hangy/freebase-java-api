@@ -9,7 +9,7 @@ import org.apache.http.client.HttpClient;
 
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
-public class UploadService extends AbstractFreebaseService {
+public class UploadService extends AuthenticationEnabledFreebaseService {
 	private static final Log LOG = LogFactory.getLog(UploadService.class);
 
 	public UploadService(final HttpClient httpClient) {
@@ -23,7 +23,7 @@ public class UploadService extends AbstractFreebaseService {
 	public final void upload(final byte[] content, final String contentType)
 			throws FreebaseServiceException {
 		try {
-			final URL url = new URL(getBaseUrl() + "/reconciliation/upload");
+			final URL url = new URL(getBaseUrl() + "/service/upload");
 			final String result = uploadFile(url, content, contentType);
 			LOG.debug("Upload response: " + result);
 		} catch (MalformedURLException e) {
