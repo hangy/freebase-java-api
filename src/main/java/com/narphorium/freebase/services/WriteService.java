@@ -13,12 +13,11 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.HttpClient;
 
 import com.narphorium.freebase.query.Query;
-import com.narphorium.freebase.results.AbstractResultSet;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class WriteService extends AbstractFreebaseService {
 
-	private static final Log LOG = LogFactory.getLog(AbstractResultSet.class);
+	private static final Log LOG = LogFactory.getLog(WriteService.class);
 
 	public WriteService(final HttpClient httpClient) {
 		super(httpClient);

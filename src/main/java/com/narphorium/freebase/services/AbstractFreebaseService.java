@@ -23,6 +23,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
@@ -41,7 +42,7 @@ public class AbstractFreebaseService {
 
 	private static final JSONReader jsonParser = new JSONReader();
 	private static final JSONWriter jsonWriter = new JSONWriter();
-	
+
 	private final HttpClient httpClient;
 	private final HttpContext localContext = new BasicHttpContext();
 	private final CookieStore cookieStore = new BasicCookieStore();
@@ -113,7 +114,6 @@ public class AbstractFreebaseService {
 	}
 
 	protected final String fetchPage(final String url) throws IOException {
-		String content = "";
 		final String formattedUrl = url.replaceAll(" ", "%20");
 
 		LOG.debug("URL: " + formattedUrl);
@@ -123,7 +123,7 @@ public class AbstractFreebaseService {
 		method.addHeader("X-Metaweb-Request", "");
 		method.addHeader("Accept-Charset", "utf-8");
 
-		content = getExecutionResult(method);
+		final String content = getExecutionResult(method);
 		LOG.debug(content);
 
 		return content;
@@ -131,8 +131,6 @@ public class AbstractFreebaseService {
 
 	protected final String postContent(final URL url,
 			final Map<String, String> content) {
-		String result = "";
-
 		final HttpPost method = new HttpPost(url.toString());
 		method.addHeader("User-Agent", USER_AGENT);
 		method.addHeader("X-Metaweb-Request", "");
@@ -147,12 +145,26 @@ public class AbstractFreebaseService {
 
 		try {
 			method.setEntity(new UrlEncodedFormEntity(httpParams, HTTP.UTF_8));
-			result = getExecutionResult(method);
+			return getExecutionResult(method);
 		} catch (final UnsupportedEncodingException e) {
 			LOG.error(e.getMessage(), e);
 		}
 
-		return result;
+		return "";
+	}
+
+	protected final String uploadFile(final URL url, final byte[] content,
+			final String contentType) {
+		final HttpPost method = new HttpPost(url.toString());
+		method.addHeader("User-Agent", USER_AGENT);
+		method.addHeader("X-Metaweb-Request", "");
+		method.addHeader("Accept-Charset", "utf-8");
+		method.addHeader("Content-Type", contentType);
+
+		final ByteArrayEntity entity = new ByteArrayEntity(content);
+		method.setEntity(entity);
+
+		return getExecutionResult(method);
 	}
 
 	protected final <T> T executeHttpRequest(HttpUriRequest request,
@@ -161,8 +173,6 @@ public class AbstractFreebaseService {
 	}
 
 	private String getExecutionResult(final HttpUriRequest request) {
-		String result = "";
-
 		try {
 			final ResponseHandler<String> handler = new ResponseHandler<String>() {
 				public String handleResponse(HttpResponse response)
@@ -178,7 +188,7 @@ public class AbstractFreebaseService {
 					for (final Header header : response.getAllHeaders()) {
 						LOG.info(header);
 					}
-					 
+
 					if (entity != null) {
 						return EntityUtils.toString(entity, "utf8");
 					} else {
@@ -187,12 +197,12 @@ public class AbstractFreebaseService {
 				}
 			};
 
-			result = executeHttpRequest(request, handler);
+			return executeHttpRequest(request, handler);
 		} catch (final IOException e) {
 			LOG.error(e.getMessage(), e);
 		}
 
-		return result;
+		return "";
 	}
 
 }
