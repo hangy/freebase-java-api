@@ -23,6 +23,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.message.BasicNameValuePair;
@@ -176,6 +177,20 @@ public class AbstractFreebaseService {
 			LOG.error(e.getMessage(), e);
 			return "";
 		}
+	}
+
+	protected final String uploadFile(final URL url, final byte[] content,
+			final String contentType) {
+		final HttpPost method = new HttpPost(url.toString());
+		addDefaultHeaders(method);
+		method.addHeader("Content-Type", contentType);
+
+		final ByteArrayEntity entity = new ByteArrayEntity(content);
+		method.setEntity(entity);
+
+		final String result = getExecutionResult(method);
+		LOG.debug(result);
+		return result;
 	}
 
 	protected final <T> T executeHttpRequest(HttpUriRequest request,
