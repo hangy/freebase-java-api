@@ -9,6 +9,8 @@ import com.google.api.client.auth.oauth2.AccessTokenErrorResponse;
 import com.google.api.client.auth.oauth2.AccessTokenRequest;
 import com.google.api.client.auth.oauth2.AccessTokenResponse;
 import com.google.api.client.http.HttpResponseException;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson.JacksonFactory;
 
 public class Authorizer {
 
@@ -30,9 +32,7 @@ public class Authorizer {
 	public final boolean authorize(final String code) throws IOException {
 		try {
 			final AccessTokenRequest.AuthorizationCodeGrant request = new AccessTokenRequest.AuthorizationCodeGrant();
-			request.authorizationServerUrl = BASE_AUTHORIZATION_URL;
-			request.clientId = clientId;
-			request.clientSecret = clientSecret;
+			setupRequest(request);
 			request.code = code;
 			request.redirectUri = "urn:ietf:wg:oauth:2.0:oob";
 
@@ -53,9 +53,7 @@ public class Authorizer {
 	public final boolean refresh() throws IOException {
 		try {
 			final AccessTokenRequest.RefreshTokenGrant request = new AccessTokenRequest.RefreshTokenGrant();
-			request.authorizationServerUrl = BASE_AUTHORIZATION_URL;
-			request.clientId = clientId;
-			request.clientSecret = clientSecret;
+			setupRequest(request);
 			request.refreshToken = this.state.getRefreshToken();
 
 			final AccessTokenResponse response = request.execute().parseAs(
@@ -70,6 +68,15 @@ public class Authorizer {
 			state = null;
 			return false;
 		}
+	}
+	
+	private void setupRequest(final AccessTokenRequest request) {
+		request.transport = new NetHttpTransport();
+		request.jsonFactory = new JacksonFactory();
+		request.useBasicAuthorization = false;
+		request.authorizationServerUrl = BASE_AUTHORIZATION_URL;
+		request.clientId = clientId;
+		request.clientSecret = clientSecret;
 	}
 
 }
