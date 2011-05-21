@@ -33,10 +33,7 @@ public class ReadService extends AbstractFreebaseService {
 		final List<Query> queries = new ArrayList<Query>();
 		queries.add(query);
 
-		final List<Object> cursors = new ArrayList<Object>();
-		cursors.add(cursor);
-
-		final String envelope = buildReadQueryEnvelope(queries, cursors);
+		final String envelope = buildReadQueryEnvelope(queries);
 		final String url = getBaseUrl() + "/service/mqlread?queries="
 				+ URLEncoder.encode(envelope, "UTF-8");
 
@@ -62,23 +59,14 @@ public class ReadService extends AbstractFreebaseService {
 		return query.buildResultSet(this);
 	}
 
-	protected final String buildReadQueryEnvelope(final List<Query> queries,
-			final List<Object> cursors) {
+	protected final String buildReadQueryEnvelope(final List<Query> queries) {
 		final StringBuilder envelope = new StringBuilder("{");
 		final Iterator<Query> i = queries.iterator();
-		final Iterator<Object> j = cursors.iterator();
-		while (i.hasNext() && j.hasNext()) {
+		while (i.hasNext()) {
 			final Query query = i.next();
-			final Object cursor = j.next();
 			envelope.append("\"").append(query.getName()).append("\":{");
 			envelope.append("\"query\":").append(query.toJSON());
-			envelope.append(",\"cursor\":");
-			if (cursor instanceof Boolean) {
-				envelope.append(cursor.toString());
-			} else {
-				envelope.append("\"").append(cursor).append("\"");
-			}
-
+			
 			envelope.append("}");
 			if (i.hasNext()) {
 				envelope.append(",");

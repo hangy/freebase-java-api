@@ -21,7 +21,7 @@ public abstract class AbstractResultSet implements ResultSet {
 	private Query query;
 	private List<Result> results = new ArrayList<Result>();
 	private int currentResult;
-	private Object cursor;
+	private Object cursor = "";
 	private int numPages;
 	private boolean fetchedFirstPage;
 
@@ -47,7 +47,7 @@ public abstract class AbstractResultSet implements ResultSet {
 	public final void reset() {
 		fetchedFirstPage = false;
 		currentResult = -1;
-		cursor = true;
+		cursor = "";
 	}
 
 	public final int size() throws FreebaseServiceException {
@@ -64,8 +64,7 @@ public abstract class AbstractResultSet implements ResultSet {
 
 	public final Result next() throws FreebaseServiceException {
 		++currentResult;
-		if (currentResult >= (results.size() - 1)
-				&& ((cursor instanceof Boolean && (Boolean) cursor == true) || (cursor instanceof String))) {
+		if (currentResult >= (results.size() - 1) && cursor instanceof String) {
 			fetchNextPage();
 		}
 
