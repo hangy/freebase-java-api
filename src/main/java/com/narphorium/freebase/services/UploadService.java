@@ -23,15 +23,24 @@ public class UploadService extends AbstractFreebaseService {
 		super(baseUrl, authorizer, httpClient);
 	}
 
-	public final void upload(final byte[] content, final String contentType)
+	public final void uploadImage(final byte[] content, final String contentType)
 			throws FreebaseServiceException {
+		this.upload(content, contentType, "image");
+	}
+
+	public final void uploadText(final byte[] content, final String contentType)
+			throws FreebaseServiceException {
+		this.upload(content, contentType, "text");
+	}
+
+	private final void upload(final byte[] content, final String contentType,
+			final String uploadType) throws FreebaseServiceException {
 		try {
-			final URL url = new URL(getBaseUrl() + "/service/upload");
+			final URL url = new URL(getBaseUrl() + "/" + uploadType);
 			final String result = uploadFile(url, content, contentType);
 			LOG.debug("Upload response: " + result);
 		} catch (MalformedURLException e) {
 			LOG.error(e.getMessage(), e);
 		}
 	}
-
 }

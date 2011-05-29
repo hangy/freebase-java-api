@@ -33,6 +33,7 @@ public class ReconciliationService extends AbstractFreebaseService {
 	public final ReconciliationResultSet reconcile(
 			final Map<String, Object> values) {
 		try {
+			// TODO: Where will it be? http://wiki.freebase.com/wiki/?oldid=7968 et al do not have definite information about this atm.
 			final URL url = new URL(getBaseUrl() + "/reconciliation/query");
 			LOG.debug("URL: " + url);
 

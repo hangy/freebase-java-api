@@ -36,7 +36,7 @@ public class TransService extends AbstractFreebaseService {
 		Image result = null;
 
 		try {
-			final String url = getUrlForId(id);
+			final String url = getUrlForId(id, "image");
 			final HttpGet method = new HttpGet(url);
 			method.addHeader("User-Agent", USER_AGENT);
 			final ResponseHandler<Image> handler = new ResponseHandler<Image>() {
@@ -68,12 +68,12 @@ public class TransService extends AbstractFreebaseService {
 
 	public final String fetchArticle(final String id) throws IOException,
 			FreebaseServiceException {
-		final String url = getUrlForId(id);
+		final String url = getUrlForId(id, "text");
 		return fetchPage(url);
 	}
 
-	private String getUrlForId(final String id) {
-		String url = getBaseUrl() + "/trans/raw";
+	private String getUrlForId(final String id, final String type) {
+		String url = getBaseUrl() + "/" + type;
 
 		if (id.startsWith("#")) {
 			url += "/guid/" + id.substring(1);

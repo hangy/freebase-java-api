@@ -29,7 +29,7 @@ public class WriteService extends AbstractFreebaseService {
 	public final String write(final Query query)
 			throws FreebaseServiceException {
 		try {
-			final URL url = new URL(getBaseUrl() + "/service/mqlwrite");
+			final URL url = new URL(getBaseUrl() + "/mqlwrite");
 			final Map<String, String> content = new HashMap<String, String>();
 			content.put("query", query.toJSON());
 			return postContent(url, content);

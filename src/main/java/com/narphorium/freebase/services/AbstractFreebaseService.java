@@ -62,7 +62,7 @@ public class AbstractFreebaseService {
 	protected AbstractFreebaseService(final Authorizer authorizer,
 			final HttpClient httpClient) {
 		try {
-			baseUrl = new URL("http://www.freebase.com/api");
+			baseUrl = new URL("https://www.googleapis.com/freebase/v1");
 		} catch (MalformedURLException e) {
 			LOG.error(e.getMessage(), e);
 		}
@@ -118,22 +118,7 @@ public class AbstractFreebaseService {
 
 		this.maximumRetries = maximumRetries;
 	}
-
-	/**
-	 * Resets the <code>mwLastWriteTime</code> cookie to the current time. This
-	 * ensures that any requests from the time you use this service gets you the
-	 * latest data instead of possibly stale cached data.
-	 * 
-	 * @see http://www.freebase.com/docs/web_services/touch
-	 * @return The Freebase.com response
-	 */
-	public final String touch() {
-		final HttpPost method = new HttpPost(this.baseUrl + "/service/touch");
-		addDefaultHeaders(method);
-
-		return getExecutionResult(method);
-	}
-
+	
 	protected static final Object parseJSON(String results) throws IOException {
 		return JSON_PARSER.read(results);
 	}

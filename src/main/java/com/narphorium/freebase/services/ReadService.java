@@ -28,7 +28,7 @@ public class ReadService extends AbstractFreebaseService {
 	@SuppressWarnings("unchecked")
 	public final Map<String, Object> readRaw(final Query query,
 			final Object cursor) throws IOException, FreebaseServiceException {
-		final String url = getBaseUrl() + "/service/mqlread?query="
+		final String url = getBaseUrl() + "/mqlread?query="
 				+ URLEncoder.encode(query.toJSON(), "UTF-8");
 
 		final String response = fetchPage(url);
