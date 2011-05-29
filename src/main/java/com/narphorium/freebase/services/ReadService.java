@@ -3,8 +3,6 @@ package com.narphorium.freebase.services;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,12 +28,8 @@ public class ReadService extends AbstractFreebaseService {
 	@SuppressWarnings("unchecked")
 	public final Map<String, Object> readRaw(final Query query,
 			final Object cursor) throws IOException, FreebaseServiceException {
-		final List<Query> queries = new ArrayList<Query>();
-		queries.add(query);
-
-		final String envelope = buildReadQueryEnvelope(queries);
-		final String url = getBaseUrl() + "/service/mqlread?queries="
-				+ URLEncoder.encode(envelope, "UTF-8");
+		final String url = getBaseUrl() + "/service/mqlread?query="
+				+ URLEncoder.encode(query.toJSON(), "UTF-8");
 
 		final String response = fetchPage(url);
 		final Map<String, Object> data = (Map<String, Object>) parseJSON(response);
@@ -57,23 +51,6 @@ public class ReadService extends AbstractFreebaseService {
 	public final ResultSet read(final Query query, final String cursor)
 			throws IOException {
 		return query.buildResultSet(this);
-	}
-
-	protected final String buildReadQueryEnvelope(final List<Query> queries) {
-		final StringBuilder envelope = new StringBuilder("{");
-		final Iterator<Query> i = queries.iterator();
-		while (i.hasNext()) {
-			final Query query = i.next();
-			envelope.append("\"").append(query.getName()).append("\":{");
-			envelope.append("\"query\":").append(query.toJSON());
-			
-			envelope.append("}");
-			if (i.hasNext()) {
-				envelope.append(",");
-			}
-		}
-
-		return envelope.append("}").toString();
 	}
 
 	@SuppressWarnings("unchecked")
