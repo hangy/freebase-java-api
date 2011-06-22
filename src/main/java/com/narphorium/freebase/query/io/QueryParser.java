@@ -24,7 +24,7 @@ public class QueryParser {
 
 	private static final Log LOG = LogFactory.getLog(QueryParser.class);
 	private static Pattern parameterNamePattern = Pattern
-			.compile("([\\d\\w_]+):([\\d\\w_\\/]+)");
+			.compile("([\\d\\w_]+):([\\d\\w_\\/]+)(?:>|<|<=|>=|~=|\\|=)?");
 	private static Matcher parameterNameMatcher = parameterNamePattern
 			.matcher("");
 
