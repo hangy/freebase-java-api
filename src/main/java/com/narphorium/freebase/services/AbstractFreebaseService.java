@@ -234,10 +234,11 @@ public class AbstractFreebaseService {
 		}
 	}
 
-	private static void addDefaultHeaders(final AbstractHttpMessage message) {
+	private void addDefaultHeaders(final AbstractHttpMessage message) {
 		message.addHeader("User-Agent", USER_AGENT);
 		message.addHeader("X-Metaweb-Request", "");
 		message.addHeader("Accept-Charset", "utf-8");
+		message.addHeader("Authorization", "OAuth " + authorizer.getAccessToken());
 	}
 
 }

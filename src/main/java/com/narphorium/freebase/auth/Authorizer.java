@@ -68,6 +68,14 @@ public class Authorizer {
 		}
 	}
 	
+	public final String getAccessToken() {
+		if (null == state) {
+			return null;
+		}
+		
+		return state.getAccessToken();
+	}
+	
 	private void setupRequest(final AccessTokenRequest request) {
 		request.transport = new NetHttpTransport();
 		request.jsonFactory = new JacksonFactory();
