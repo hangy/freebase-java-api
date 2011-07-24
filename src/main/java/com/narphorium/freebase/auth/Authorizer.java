@@ -5,9 +5,9 @@ import java.io.IOException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.api.client.auth.oauth2.AccessTokenErrorResponse;
-import com.google.api.client.auth.oauth2.AccessTokenRequest;
-import com.google.api.client.auth.oauth2.AccessTokenResponse;
+import com.google.api.client.auth.oauth2.draft10.AccessTokenErrorResponse;
+import com.google.api.client.auth.oauth2.draft10.AccessTokenRequest;
+import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
 import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson.JacksonFactory;
@@ -36,8 +36,7 @@ public class Authorizer {
 			request.code = code;
 			request.redirectUri = "urn:ietf:wg:oauth:2.0:oob";
 
-			final AccessTokenResponse response = request.execute().parseAs(
-					AccessTokenResponse.class);
+			final AccessTokenResponse response = request.execute();
 			LOG.debug("Access token: " + response.accessToken);
 			state = new AuthorizationState(response);
 			return true;
@@ -56,8 +55,7 @@ public class Authorizer {
 			setupRequest(request);
 			request.refreshToken = this.state.getRefreshToken();
 
-			final AccessTokenResponse response = request.execute().parseAs(
-					AccessTokenResponse.class);
+			final AccessTokenResponse response = request.execute();
 			LOG.debug("Access token: " + response.accessToken);
 			state.apply(response);
 			return true;

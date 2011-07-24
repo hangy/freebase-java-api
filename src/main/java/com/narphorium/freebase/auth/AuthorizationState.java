@@ -1,6 +1,6 @@
 package com.narphorium.freebase.auth;
 
-import com.google.api.client.auth.oauth2.AccessTokenResponse;
+import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
 import com.google.api.client.util.DateTime;
 
 public class AuthorizationState {
