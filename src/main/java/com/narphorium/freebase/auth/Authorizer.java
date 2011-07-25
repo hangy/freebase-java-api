@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenErrorResponse;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenRequest;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
+import com.google.api.client.auth.oauth2.draft10.InstalledApp;
 import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson.JacksonFactory;
@@ -34,7 +35,7 @@ public class Authorizer {
 			final AccessTokenRequest.AuthorizationCodeGrant request = new AccessTokenRequest.AuthorizationCodeGrant();
 			setupRequest(request);
 			request.code = code;
-			request.redirectUri = "urn:ietf:wg:oauth:2.0:oob";
+			request.redirectUri = InstalledApp.OOB_REDIRECT_URI;
 
 			final AccessTokenResponse response = request.execute();
 			LOG.debug("Access token: " + response.accessToken);
@@ -67,15 +68,15 @@ public class Authorizer {
 			return false;
 		}
 	}
-	
+
 	public final String getAccessToken() {
 		if (null == state) {
 			return null;
 		}
-		
+
 		return state.getAccessToken();
 	}
-	
+
 	private void setupRequest(final AccessTokenRequest request) {
 		request.transport = new NetHttpTransport();
 		request.jsonFactory = new JacksonFactory();
