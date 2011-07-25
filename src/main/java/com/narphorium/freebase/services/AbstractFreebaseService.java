@@ -10,30 +10,10 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.message.AbstractHttpMessage;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
 import org.stringtree.json.JSONReader;
 import org.stringtree.json.JSONWriter;
 
+import com.google.api.client.http.HttpTransport;
 import com.narphorium.freebase.auth.Authorizer;
 
 public class AbstractFreebaseService {
@@ -52,53 +32,47 @@ public class AbstractFreebaseService {
 	private final String key;
 	private final Authorizer authorizer;
 
-	private final HttpClient httpClient;
-	private final HttpContext localContext = new BasicHttpContext();
-	private final CookieStore cookieStore = new BasicCookieStore();
+	private final HttpTransport httpTransport;
 
 	private URL baseUrl;
 	private int maximumRetries = MAXIMUM_RETRIES;
 	private int currentTry = Integer.MIN_VALUE;
 
 	protected AbstractFreebaseService(final String key,
-			final HttpClient httpClient) {
+			final HttpTransport httpTransport) {
 		try {
 			baseUrl = new URL("https://www.googleapis.com/freebase/v1");
 		} catch (MalformedURLException e) {
 			LOG.error(e.getMessage(), e);
 		}
 
-		if (null == httpClient) {
-			throw new IllegalArgumentException("httpClient cannot be null");
+		if (null == httpTransport) {
+			throw new IllegalArgumentException("httpTransport cannot be null");
 		}
 
 		this.key = key;
 		this.authorizer = null;
-		this.httpClient = httpClient;
-		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
-				this.cookieStore);
+		this.httpTransport = httpTransport;
 	}
 
 	protected AbstractFreebaseService(final URL baseUrl, final String key,
-			final HttpClient httpClient) {
+			final HttpTransport httpTransport) {
 		if (null == baseUrl) {
 			throw new IllegalArgumentException("baseUrl cannot be null");
 		}
 
-		if (null == httpClient) {
-			throw new IllegalArgumentException("httpClient cannot be null");
+		if (null == httpTransport) {
+			throw new IllegalArgumentException("httpTransport cannot be null");
 		}
 
 		this.baseUrl = baseUrl;
 		this.key = key;
 		this.authorizer = null;
-		this.httpClient = httpClient;
-		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
-				this.cookieStore);
+		this.httpTransport = httpTransport;
 	}
 
 	protected AbstractFreebaseService(final String key,
-			final Authorizer authorizer, final HttpClient httpClient) {
+			final Authorizer authorizer, final HttpTransport httpTransport) {
 		try {
 			baseUrl = new URL("https://www.googleapis.com/freebase/v1");
 		} catch (MalformedURLException e) {
@@ -109,19 +83,17 @@ public class AbstractFreebaseService {
 			throw new IllegalArgumentException("authorizer cannot be null");
 		}
 
-		if (null == httpClient) {
-			throw new IllegalArgumentException("httpClient cannot be null");
+		if (null == httpTransport) {
+			throw new IllegalArgumentException("httpTransport cannot be null");
 		}
 
 		this.key = key;
 		this.authorizer = authorizer;
-		this.httpClient = httpClient;
-		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
-				this.cookieStore);
+		this.httpTransport = httpTransport;
 	}
 
 	protected AbstractFreebaseService(final URL baseUrl, final String key,
-			final Authorizer authorizer, final HttpClient httpClient) {
+			final Authorizer authorizer, final HttpTransport httpTransport) {
 		if (null == baseUrl) {
 			throw new IllegalArgumentException("baseUrl cannot be null");
 		}
@@ -130,16 +102,14 @@ public class AbstractFreebaseService {
 			throw new IllegalArgumentException("authorizer cannot be null");
 		}
 
-		if (null == httpClient) {
-			throw new IllegalArgumentException("httpClient cannot be null");
+		if (null == httpTransport) {
+			throw new IllegalArgumentException("httpTransport cannot be null");
 		}
 
 		this.baseUrl = baseUrl;
 		this.key = key;
 		this.authorizer = authorizer;
-		this.httpClient = httpClient;
-		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
-				this.cookieStore);
+		this.httpTransport = httpTransport;
 	}
 
 	public final synchronized URL getBaseUrl() {

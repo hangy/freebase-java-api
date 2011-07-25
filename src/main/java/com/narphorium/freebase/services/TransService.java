@@ -8,26 +8,21 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
 
+import com.google.api.client.http.HttpTransport;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class TransService extends AbstractFreebaseService {
 
 	private static final Log LOG = LogFactory.getLog(TransService.class);
 
-	public TransService(final String key, final HttpClient httpClient) {
-		super(key, httpClient);
+	public TransService(final String key, final HttpTransport httpTransport) {
+		super(key, httpTransport);
 	}
 
 	public TransService(final URL baseUrl, final String key,
-			final HttpClient httpClient) {
-		super(baseUrl, key, httpClient);
+			final HttpTransport httpTransport) {
+		super(baseUrl, key, httpTransport);
 	}
 
 	public final Image fetchImage(final String id)
