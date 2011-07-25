@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.http.client.HttpClient;
 
+import com.google.api.client.json.JsonFactory;
 import com.narphorium.freebase.query.Query;
 import com.narphorium.freebase.results.ResultSet;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
@@ -15,13 +16,14 @@ import com.narphorium.freebase.services.exceptions.FreebaseServiceTimeoutExcepti
 
 public class ReadService extends AbstractFreebaseService {
 
-	public ReadService(final String key, final HttpClient httpClient) {
-		super(key, httpClient);
+	public ReadService(final JsonFactory jsonFactory, final String key,
+			final HttpClient httpClient) {
+		super(jsonFactory, key, httpClient);
 	}
 
-	public ReadService(final URL baseUrl, final String key,
-			final HttpClient httpClient) {
-		super(baseUrl, key, httpClient);
+	public ReadService(final JsonFactory jsonFactory, final URL baseUrl,
+			final String key, final HttpClient httpClient) {
+		super(jsonFactory, baseUrl, key, httpClient);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -7,23 +7,26 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.stringtree.json.JSONWriter;
 
+import com.google.api.client.json.JsonFactory;
 import com.narphorium.freebase.results.ResultSet;
 
 public abstract class AbstractQuery implements Query {
 
 	private static final Log LOG = LogFactory.getLog(AbstractQuery.class);
 
-	private String name;
+	private final JsonFactory jsonFactory;
+	private final String name;
 	private List<Parameter> parameters = new ArrayList<Parameter>();
 	private List<Parameter> blankFields = new ArrayList<Parameter>();
 	private Map<String, Parameter> parametersByName = new HashMap<String, Parameter>();
 	private Object data;
 	private ResultSet resultSet;
 
-	public AbstractQuery(final String name, final Object data,
-			final List<Parameter> parameters, final List<Parameter> blankFields) {
+	public AbstractQuery(final JsonFactory jsonFactory, final String name,
+			final Object data, final List<Parameter> parameters,
+			final List<Parameter> blankFields) {
+		this.jsonFactory = jsonFactory;
 		this.name = name;
 		this.data = data;
 		for (final Parameter parameter : parameters) {
@@ -34,7 +37,8 @@ public abstract class AbstractQuery implements Query {
 		this.blankFields.addAll(blankFields);
 	}
 
-	public AbstractQuery(final Query query) {
+	public AbstractQuery(final JsonFactory jsonFactory, final Query query) {
+		this.jsonFactory = jsonFactory;
 		this.name = query.getName();
 		this.data = copyData(query.getData());
 		for (final Parameter parameter : query.getParameters()) {
@@ -107,11 +111,8 @@ public abstract class AbstractQuery implements Query {
 		if (topData instanceof List) {
 			topData = ((List<Object>) topData).get(0);
 		}
+
 		parameter.getPath().setValue(topData, value);
-		/*
-		 * for (JsonPath path : parameter.getPaths()) { path.setValue(topData,
-		 * value); }
-		 */
 	}
 
 	public final List<Parameter> getBlankFields() {
@@ -127,10 +128,8 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	public final String toJSON() {
-		final JSONWriter writer = new JSONWriter();
-		String query = writer.write(data);
+		String query = jsonFactory.toString(data);
 		query = query.replaceAll("\\\\/", "/");
 		return query;
 	}
-
 }

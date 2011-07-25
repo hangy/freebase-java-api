@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.api.client.json.JsonFactory;
 import com.narphorium.freebase.results.DefaultResultSet;
 import com.narphorium.freebase.results.ResultSet;
 import com.narphorium.freebase.services.ReadService;
@@ -13,20 +14,26 @@ public class DefaultQuery extends AbstractQuery implements Query {
 
 	private static final Log LOG = LogFactory.getLog(DefaultQuery.class);
 
-	public DefaultQuery(final String name, final Object data,
-			final List<Parameter> parameters, final List<Parameter> blankFields) {
-		super(name, data, parameters, blankFields);
+	private final JsonFactory jsonFactory;
 
-		/*
-		 * for (Parameter parameter : parameters) {
-		 * System.out.print(parameter.getName()); for (Object[] path :
-		 * parameter.getPaths()) { System.out.print(" - "); for (Object e :
-		 * path) { System.out.print("/" + e); } System.out.println(); } }
-		 */
+	public DefaultQuery(final JsonFactory jsonFactory, final String name,
+			final Object data, final List<Parameter> parameters,
+			final List<Parameter> blankFields) {
+		super(jsonFactory, name, data, parameters, blankFields);
+		if (null == jsonFactory) {
+			throw new IllegalArgumentException("jsonFactory cannot be null");
+		}
+
+		this.jsonFactory = jsonFactory;
 	}
 
-	public DefaultQuery(final Query query) {
-		super(query);
+	public DefaultQuery(final JsonFactory jsonFactory, final Query query) {
+		super(jsonFactory, query);
+		if (null == jsonFactory) {
+			throw new IllegalArgumentException("jsonFactory cannot be null");
+		}
+
+		this.jsonFactory = jsonFactory;
 	}
 
 	public final void parseParameterValue(final String name,
@@ -46,7 +53,6 @@ public class DefaultQuery extends AbstractQuery implements Query {
 	}
 
 	public final ResultSet buildResultSet(final ReadService readService) {
-		return new DefaultResultSet(this, readService);
+		return new DefaultResultSet(jsonFactory, this, readService);
 	}
-
 }

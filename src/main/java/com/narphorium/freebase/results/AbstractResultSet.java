@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.api.client.json.JsonFactory;
 import com.narphorium.freebase.query.DefaultQuery;
 import com.narphorium.freebase.query.Query;
 import com.narphorium.freebase.services.ReadService;
@@ -17,17 +18,20 @@ public abstract class AbstractResultSet implements ResultSet {
 
 	private static final Log LOG = LogFactory.getLog(AbstractResultSet.class);
 
-	private ReadService readService;
-	private Query query;
+	private final JsonFactory jsonFactory;
+	private final ReadService readService;
+	private final Query query;
 	private List<Result> results = new ArrayList<Result>();
 	private int currentResult;
 	private Object cursor = "";
 	private int numPages;
 	private boolean fetchedFirstPage;
 
-	public AbstractResultSet(final Query query, final ReadService readService) {
+	public AbstractResultSet(final JsonFactory jsonFactory, final Query query,
+			final ReadService readService) {
+		this.jsonFactory = jsonFactory;
 		this.readService = readService;
-		this.query = new DefaultQuery(query);
+		this.query = new DefaultQuery(jsonFactory, query);
 		reset();
 	}
 
@@ -94,11 +98,11 @@ public abstract class AbstractResultSet implements ResultSet {
 			if (q.get("result") instanceof List) {
 				final List<Object> r = (List<Object>) q.get("result");
 				for (final Object obj : r) {
-					results.add(new DefaultResult(query, obj));
+					results.add(new DefaultResult(jsonFactory, query, obj));
 				}
 			} else {
 				final Object obj = q.get("result");
-				results.add(new DefaultResult(query, obj));
+				results.add(new DefaultResult(jsonFactory, query, obj));
 			}
 
 			++numPages;

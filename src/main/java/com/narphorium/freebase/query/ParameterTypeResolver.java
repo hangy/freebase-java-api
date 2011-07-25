@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.api.client.json.JsonFactory;
 import com.narphorium.freebase.query.io.QueryParser;
 import com.narphorium.freebase.results.Result;
 import com.narphorium.freebase.results.ResultSet;
@@ -59,11 +60,12 @@ public class ParameterTypeResolver {
 	private static Map<String, String> expectedTypeByProperty = new HashMap<String, String>();
 	private Query expectedTypeQuery;
 
-	private ReadService readService;
+	private final ReadService readService;
 
-	public ParameterTypeResolver(final ReadService readService) {
+	public ParameterTypeResolver(final JsonFactory jsonFactory,
+			final ReadService readService) {
 		this.readService = readService;
-		this.expectedTypeQuery = new QueryParser()
+		this.expectedTypeQuery = new QueryParser(jsonFactory)
 				.parse("q1",
 						"{\"property_id:id\":null,\"type\":\"/type/property\",\"expected_type:expected_type\":null}");
 	}
@@ -80,21 +82,22 @@ public class ParameterTypeResolver {
 		if (data == null) {
 			return;
 		} else if (data instanceof List) {
-			for (Object element : (List<Object>) data) {
+			for (final Object element : (List<Object>) data) {
 				processData(query, element, ept);
 			}
 		} else if (data instanceof Map) {
-			Map<String, Object> mapData = (Map<String, Object>) data;
+			final Map<String, Object> mapData = (Map<String, Object>) data;
 			if (mapData.containsKey("type")) {
-				Object type = mapData.get("type");
+				final Object type = mapData.get("type");
 				if (type instanceof String) {
 					ept = (String) type;
 				} else if (type instanceof Map) {
 					ept = ((Map<String, String>) type).get("id");
 				}
 			}
-			for (String key : mapData.keySet()) {
-				Object value = mapData.get(key);
+
+			for (final String key : mapData.keySet()) {
+				final Object value = mapData.get(key);
 				String childExpectedType = "/type/object";
 
 				parameterNameMatcher.reset(key);
@@ -120,10 +123,12 @@ public class ParameterTypeResolver {
 		} else if (id.equals("value")) {
 			return parentType;
 		}
+
 		String property = id;
 		if (!property.matches("/[\\w\\d_]+/[\\w\\d_]+/[\\w\\d_]+")) {
 			property = parentType + "/" + id;
 		}
+
 		String expectedType = expectedTypeByProperty.get(property);
 		if (expectedType == null) {
 			expectedTypeQuery.setParameterValue("property_id", property);
@@ -140,6 +145,7 @@ public class ParameterTypeResolver {
 				LOG.error(e.getMessage(), e);
 			}
 		}
+
 		return expectedType;
 	}
 

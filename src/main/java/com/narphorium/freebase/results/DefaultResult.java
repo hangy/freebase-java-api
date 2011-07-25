@@ -10,6 +10,7 @@ import java.util.Locale;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.api.client.json.JsonFactory;
 import com.narphorium.freebase.query.DefaultQuery;
 import com.narphorium.freebase.query.JsonPath;
 import com.narphorium.freebase.query.Parameter;
@@ -20,11 +21,12 @@ public class DefaultResult implements Result {
 	private static final Log LOG = LogFactory.getLog(DefaultResult.class);
 	private static final String DATEFORMAT = "yyyy-mm-dd";
 
-	private Query query;
-	private Object jsonData;
+	private final Query query;
+	private final Object jsonData;
 
-	public DefaultResult(final Query query, final Object jsonData) {
-		this.query = new DefaultQuery(query);
+	public DefaultResult(final JsonFactory jsonFactory, final Query query,
+			final Object jsonData) {
+		this.query = new DefaultQuery(jsonFactory, query);
 		this.jsonData = jsonData;
 	}
 

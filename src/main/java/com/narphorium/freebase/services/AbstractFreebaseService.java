@@ -31,9 +31,8 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
-import org.stringtree.json.JSONReader;
-import org.stringtree.json.JSONWriter;
 
+import com.google.api.client.json.JsonFactory;
 import com.narphorium.freebase.auth.Authorizer;
 
 public class AbstractFreebaseService {
@@ -46,8 +45,7 @@ public class AbstractFreebaseService {
 	private static final Log LOG = LogFactory
 			.getLog(AbstractFreebaseService.class);
 
-	private static final JSONReader JSON_PARSER = new JSONReader();
-	private static final JSONWriter JSON_WRITER = new JSONWriter();
+	private final JsonFactory jsonFactory;
 
 	private final String key;
 	private final Authorizer authorizer;
@@ -60,8 +58,12 @@ public class AbstractFreebaseService {
 	private int maximumRetries = MAXIMUM_RETRIES;
 	private int currentTry = Integer.MIN_VALUE;
 
-	protected AbstractFreebaseService(final String key,
-			final HttpClient httpClient) {
+	protected AbstractFreebaseService(final JsonFactory jsonFactory,
+			final String key, final HttpClient httpClient) {
+		if (null == jsonFactory) {
+			throw new IllegalArgumentException("jsonFactory cannot be null");
+		}
+
 		try {
 			baseUrl = new URL("https://www.googleapis.com/freebase/v1");
 		} catch (MalformedURLException e) {
@@ -72,6 +74,7 @@ public class AbstractFreebaseService {
 			throw new IllegalArgumentException("httpClient cannot be null");
 		}
 
+		this.jsonFactory = jsonFactory;
 		this.key = key;
 		this.authorizer = null;
 		this.httpClient = httpClient;
@@ -79,8 +82,12 @@ public class AbstractFreebaseService {
 				this.cookieStore);
 	}
 
-	protected AbstractFreebaseService(final URL baseUrl, final String key,
-			final HttpClient httpClient) {
+	protected AbstractFreebaseService(final JsonFactory jsonFactory,
+			final URL baseUrl, final String key, final HttpClient httpClient) {
+		if (null == jsonFactory) {
+			throw new IllegalArgumentException("jsonFactory cannot be null");
+		}
+
 		if (null == baseUrl) {
 			throw new IllegalArgumentException("baseUrl cannot be null");
 		}
@@ -89,6 +96,7 @@ public class AbstractFreebaseService {
 			throw new IllegalArgumentException("httpClient cannot be null");
 		}
 
+		this.jsonFactory = jsonFactory;
 		this.baseUrl = baseUrl;
 		this.key = key;
 		this.authorizer = null;
@@ -97,8 +105,13 @@ public class AbstractFreebaseService {
 				this.cookieStore);
 	}
 
-	protected AbstractFreebaseService(final String key,
-			final Authorizer authorizer, final HttpClient httpClient) {
+	protected AbstractFreebaseService(final JsonFactory jsonFactory,
+			final String key, final Authorizer authorizer,
+			final HttpClient httpClient) {
+		if (null == jsonFactory) {
+			throw new IllegalArgumentException("jsonFactory cannot be null");
+		}
+
 		try {
 			baseUrl = new URL("https://www.googleapis.com/freebase/v1");
 		} catch (MalformedURLException e) {
@@ -113,6 +126,7 @@ public class AbstractFreebaseService {
 			throw new IllegalArgumentException("httpClient cannot be null");
 		}
 
+		this.jsonFactory = jsonFactory;
 		this.key = key;
 		this.authorizer = authorizer;
 		this.httpClient = httpClient;
@@ -120,8 +134,13 @@ public class AbstractFreebaseService {
 				this.cookieStore);
 	}
 
-	protected AbstractFreebaseService(final URL baseUrl, final String key,
-			final Authorizer authorizer, final HttpClient httpClient) {
+	protected AbstractFreebaseService(final JsonFactory jsonFactory,
+			final URL baseUrl, final String key, final Authorizer authorizer,
+			final HttpClient httpClient) {
+		if (null == jsonFactory) {
+			throw new IllegalArgumentException("jsonFactory cannot be null");
+		}
+
 		if (null == baseUrl) {
 			throw new IllegalArgumentException("baseUrl cannot be null");
 		}
@@ -134,6 +153,7 @@ public class AbstractFreebaseService {
 			throw new IllegalArgumentException("httpClient cannot be null");
 		}
 
+		this.jsonFactory = jsonFactory;
 		this.baseUrl = baseUrl;
 		this.key = key;
 		this.authorizer = authorizer;
@@ -159,12 +179,12 @@ public class AbstractFreebaseService {
 		this.maximumRetries = maximumRetries;
 	}
 
-	protected static final Object parseJSON(String results) throws IOException {
-		return JSON_PARSER.read(results);
+	protected final Object parseJSON(String results) throws IOException {
+		return jsonFactory.fromString(results, Object.class);
 	}
 
-	protected static final String generateJSON(Object object) {
-		return JSON_WRITER.write(object);
+	protected final String generateJSON(Object object) {
+		return jsonFactory.toString(object);
 	}
 
 	protected final String fetchPage(final String url) throws IOException {

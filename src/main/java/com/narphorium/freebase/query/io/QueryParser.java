@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.stringtree.json.JSONReader;
 
+import com.google.api.client.json.JsonFactory;
 import com.narphorium.freebase.query.DefaultQuery;
 import com.narphorium.freebase.query.JsonPath;
 import com.narphorium.freebase.query.Parameter;
@@ -28,15 +28,32 @@ public class QueryParser {
 	private static Matcher parameterNameMatcher = parameterNamePattern
 			.matcher("");
 
+	private final JsonFactory jsonFactory;
+
+	public QueryParser(final JsonFactory jsonFactory) {
+		if (null == jsonFactory) {
+			throw new IllegalArgumentException("jsonFactory cannot be null");
+		}
+
+		this.jsonFactory = jsonFactory;
+	}
+
 	public final Query parse(final String name, final String queryString) {
-		final JSONReader reader = new JSONReader();
 		final List<Parameter> parameters = new ArrayList<Parameter>();
 		final Map<String, Parameter> parametersByName = new HashMap<String, Parameter>();
 		final List<Parameter> blankFields = new ArrayList<Parameter>();
-		final Object data = reader.read(queryString);
+		Object data;
+		try {
+			data = jsonFactory.fromString(queryString, Object.class);
+		} catch (final IOException e) {
+			LOG.error(e.getMessage(), e);
+			data = null;
+		}
+
 		processData(new JsonPath(), data, blankFields, parameters,
 				parametersByName, true);
-		return new DefaultQuery(name, data, parameters, blankFields);
+		return new DefaultQuery(jsonFactory, name, data, parameters,
+				blankFields);
 	}
 
 	public final Query parse(final File queryFile) {
@@ -73,19 +90,20 @@ public class QueryParser {
 			LOG.info("data is null");
 		} else if (data instanceof List) {
 			int i = 0;
-			for (Object element : (List<Object>) data) {
-				JsonPath childPath = new JsonPath(path);
+			for (final Object element : (List<Object>) data) {
+				final JsonPath childPath = new JsonPath(path);
 				if (!isRoot) {
 					childPath.addElement(i);
 				}
+
 				processData(childPath, element, blankFields, parameters,
 						parametersByName, false);
 			}
 		} else if (data instanceof Map) {
 			Map<String, Object> mapData = (Map<String, Object>) data;
-			for (String key : mapData.keySet()) {
-				Object value = mapData.get(key);
-				JsonPath childPath = new JsonPath(path);
+			for (final String key : mapData.keySet()) {
+				final Object value = mapData.get(key);
+				final JsonPath childPath = new JsonPath(path);
 				childPath.addElement(key);
 				String id = key;
 				String name = null;
@@ -94,19 +112,22 @@ public class QueryParser {
 					name = parameterNameMatcher.group(1);
 					id = parameterNameMatcher.group(2);
 					Parameter parameter = parametersByName.get(name);
+
 					if (parameter == null) {
 						parameter = new Parameter(name, id, value);
 						parametersByName.put(name, parameter);
 						parameters.add(parameter);
 					}
+
 					if (value instanceof Map
 							&& ((Map<String, Object>) value)
 									.containsKey("value")) {
 						childPath.addElement("value");
 					}
-					// parameter.addPath(childPath);
+
 					parameter.setPath(childPath);
 				}
+
 				if (value == null) {
 					Parameter blankField = new Parameter(name, id, value);
 					blankField.setPath(childPath);

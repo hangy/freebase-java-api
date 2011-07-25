@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.HttpClient;
 
+import com.google.api.client.json.JsonFactory;
 import com.narphorium.freebase.results.ReconciliationResult;
 import com.narphorium.freebase.results.ReconciliationResultSet;
 
@@ -19,13 +20,14 @@ public class ReconciliationService extends AbstractFreebaseService {
 	private static final Log LOG = LogFactory
 			.getLog(ReconciliationService.class);
 
-	public ReconciliationService(final String key, final HttpClient httpClient) {
-		super(key, httpClient);
+	public ReconciliationService(final JsonFactory jsonFactory,
+			final String key, final HttpClient httpClient) {
+		super(jsonFactory, key, httpClient);
 	}
 
-	public ReconciliationService(final URL baseUrl, final String key,
-			final HttpClient httpClient) {
-		super(baseUrl, key, httpClient);
+	public ReconciliationService(final JsonFactory jsonFactory,
+			final URL baseUrl, final String key, final HttpClient httpClient) {
+		super(jsonFactory, baseUrl, key, httpClient);
 	}
 
 	public final ReconciliationResultSet reconcile(
@@ -53,7 +55,7 @@ public class ReconciliationService extends AbstractFreebaseService {
 		return new ReconciliationResultSet();
 	}
 
-	private static String buildQuery(final Map<String, Object> values) {
+	private String buildQuery(final Map<String, Object> values) {
 		return generateJSON(values);
 	}
 

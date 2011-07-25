@@ -4,18 +4,20 @@ import java.net.URL;
 
 import org.apache.http.client.HttpClient;
 
+import com.google.api.client.json.JsonFactory;
 import com.narphorium.freebase.results.SearchResultSet;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class SearchService extends AbstractFreebaseService {
 
-	public SearchService(final String key, final HttpClient httpClient) {
-		super(key, httpClient);
+	public SearchService(final JsonFactory jsonFactory, final String key,
+			final HttpClient httpClient) {
+		super(jsonFactory, key, httpClient);
 	}
 
-	public SearchService(final URL baseUrl, final String key,
-			final HttpClient httpClient) {
-		super(baseUrl, key, httpClient);
+	public SearchService(final JsonFactory jsonFactory, final URL baseUrl,
+			final String key, final HttpClient httpClient) {
+		super(jsonFactory, baseUrl, key, httpClient);
 	}
 
 	// TODO
