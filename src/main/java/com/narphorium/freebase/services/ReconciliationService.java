@@ -11,7 +11,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.HttpClient;
 
-import com.narphorium.freebase.auth.Authorizer;
 import com.narphorium.freebase.results.ReconciliationResult;
 import com.narphorium.freebase.results.ReconciliationResultSet;
 
@@ -20,20 +19,20 @@ public class ReconciliationService extends AbstractFreebaseService {
 	private static final Log LOG = LogFactory
 			.getLog(ReconciliationService.class);
 
-	public ReconciliationService(final Authorizer authorizer,
-			final HttpClient httpClient) {
-		super(authorizer, httpClient);
+	public ReconciliationService(final String key, final HttpClient httpClient) {
+		super(key, httpClient);
 	}
 
-	public ReconciliationService(final URL baseUrl,
-			final Authorizer authorizer, final HttpClient httpClient) {
-		super(baseUrl, authorizer, httpClient);
+	public ReconciliationService(final URL baseUrl, final String key,
+			final HttpClient httpClient) {
+		super(baseUrl, key, httpClient);
 	}
 
 	public final ReconciliationResultSet reconcile(
 			final Map<String, Object> values) {
 		try {
-			// TODO: Where will it be? http://wiki.freebase.com/wiki/?oldid=7968 et al do not have definite information about this atm.
+			// TODO: Where will it be? http://wiki.freebase.com/wiki/?oldid=7968
+			// et al do not have definite information about this atm.
 			final URL url = new URL(getBaseUrl() + "/reconciliation/query");
 			LOG.debug("URL: " + url);
 

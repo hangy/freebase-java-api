@@ -17,13 +17,14 @@ public class WriteService extends AbstractFreebaseService {
 
 	private static final Log LOG = LogFactory.getLog(WriteService.class);
 
-	public WriteService(final Authorizer authorizer, final HttpClient httpClient) {
-		super(authorizer, httpClient);
+	public WriteService(final String key, final Authorizer authorizer,
+			final HttpClient httpClient) {
+		super(key, authorizer, httpClient);
 	}
 
-	public WriteService(final URL baseUrl, final Authorizer authorizer,
-			final HttpClient httpClient) {
-		super(baseUrl, authorizer, httpClient);
+	public WriteService(final URL baseUrl, final String key,
+			final Authorizer authorizer, final HttpClient httpClient) {
+		super(baseUrl, key, authorizer, httpClient);
 	}
 
 	public final String write(final Query query)

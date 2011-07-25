@@ -13,14 +13,14 @@ import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 public class UploadService extends AbstractFreebaseService {
 	private static final Log LOG = LogFactory.getLog(UploadService.class);
 
-	public UploadService(final Authorizer authorizer,
+	public UploadService(final String key, final Authorizer authorizer,
 			final HttpClient httpClient) {
-		super(authorizer, httpClient);
+		super(key, authorizer, httpClient);
 	}
 
-	public UploadService(final URL baseUrl, final Authorizer authorizer,
-			final HttpClient httpClient) {
-		super(baseUrl, authorizer, httpClient);
+	public UploadService(final URL baseUrl, final String key,
+			final Authorizer authorizer, final HttpClient httpClient) {
+		super(baseUrl, key, authorizer, httpClient);
 	}
 
 	public final void uploadImage(final byte[] content, final String contentType)

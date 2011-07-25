@@ -49,6 +49,7 @@ public class AbstractFreebaseService {
 	private static final JSONReader JSON_PARSER = new JSONReader();
 	private static final JSONWriter JSON_WRITER = new JSONWriter();
 
+	private final String key;
 	private final Authorizer authorizer;
 
 	private final HttpClient httpClient;
@@ -59,8 +60,45 @@ public class AbstractFreebaseService {
 	private int maximumRetries = MAXIMUM_RETRIES;
 	private int currentTry = Integer.MIN_VALUE;
 
-	protected AbstractFreebaseService(final Authorizer authorizer,
+	protected AbstractFreebaseService(final String key,
 			final HttpClient httpClient) {
+		try {
+			baseUrl = new URL("https://www.googleapis.com/freebase/v1");
+		} catch (MalformedURLException e) {
+			LOG.error(e.getMessage(), e);
+		}
+
+		if (null == httpClient) {
+			throw new IllegalArgumentException("httpClient cannot be null");
+		}
+
+		this.key = key;
+		this.authorizer = null;
+		this.httpClient = httpClient;
+		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
+				this.cookieStore);
+	}
+
+	protected AbstractFreebaseService(final URL baseUrl, final String key,
+			final HttpClient httpClient) {
+		if (null == baseUrl) {
+			throw new IllegalArgumentException("baseUrl cannot be null");
+		}
+
+		if (null == httpClient) {
+			throw new IllegalArgumentException("httpClient cannot be null");
+		}
+
+		this.baseUrl = baseUrl;
+		this.key = key;
+		this.authorizer = null;
+		this.httpClient = httpClient;
+		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
+				this.cookieStore);
+	}
+
+	protected AbstractFreebaseService(final String key,
+			final Authorizer authorizer, final HttpClient httpClient) {
 		try {
 			baseUrl = new URL("https://www.googleapis.com/freebase/v1");
 		} catch (MalformedURLException e) {
@@ -75,13 +113,14 @@ public class AbstractFreebaseService {
 			throw new IllegalArgumentException("httpClient cannot be null");
 		}
 
+		this.key = key;
 		this.authorizer = authorizer;
 		this.httpClient = httpClient;
 		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
 				this.cookieStore);
 	}
 
-	public AbstractFreebaseService(final URL baseUrl,
+	protected AbstractFreebaseService(final URL baseUrl, final String key,
 			final Authorizer authorizer, final HttpClient httpClient) {
 		if (null == baseUrl) {
 			throw new IllegalArgumentException("baseUrl cannot be null");
@@ -96,6 +135,7 @@ public class AbstractFreebaseService {
 		}
 
 		this.baseUrl = baseUrl;
+		this.key = key;
 		this.authorizer = authorizer;
 		this.httpClient = httpClient;
 		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
@@ -118,7 +158,7 @@ public class AbstractFreebaseService {
 
 		this.maximumRetries = maximumRetries;
 	}
-	
+
 	protected static final Object parseJSON(String results) throws IOException {
 		return JSON_PARSER.read(results);
 	}
@@ -128,7 +168,7 @@ public class AbstractFreebaseService {
 	}
 
 	protected final String fetchPage(final String url) throws IOException {
-		final String formattedUrl = url.replaceAll(" ", "%20");
+		final String formattedUrl = addKeyToUrl(url.replaceAll(" ", "%20"));
 
 		LOG.debug("URL: " + formattedUrl);
 
@@ -143,7 +183,7 @@ public class AbstractFreebaseService {
 
 	protected final String postContent(final URL url,
 			final Map<String, String> content) {
-		final HttpPost method = new HttpPost(url.toString());
+		final HttpPost method = new HttpPost(addKeyToUrl(url.toString()));
 		addDefaultHeaders(method);
 
 		final List<NameValuePair> httpParams = new ArrayList<NameValuePair>(
@@ -166,7 +206,7 @@ public class AbstractFreebaseService {
 
 	protected final String uploadFile(final URL url, final byte[] content,
 			final String contentType) {
-		final HttpPost method = new HttpPost(url.toString());
+		final HttpPost method = new HttpPost(addKeyToUrl(url.toString()));
 		addDefaultHeaders(method);
 		method.addHeader("Content-Type", contentType);
 
@@ -193,7 +233,7 @@ public class AbstractFreebaseService {
 					final int status = response.getStatusLine().getStatusCode();
 
 					if (HttpStatus.SC_UNAUTHORIZED == status) {
-						if (currentTry >= maximumRetries) {
+						if (null == authorizer || currentTry >= maximumRetries) {
 							throw new IOException(status
 									+ ": "
 									+ response.getStatusLine()
@@ -238,7 +278,19 @@ public class AbstractFreebaseService {
 		message.addHeader("User-Agent", USER_AGENT);
 		message.addHeader("X-Metaweb-Request", "");
 		message.addHeader("Accept-Charset", "utf-8");
-		message.addHeader("Authorization", "OAuth " + authorizer.getAccessToken());
+
+		if (null != authorizer) {
+			message.addHeader("Authorization",
+					"OAuth " + authorizer.getAccessToken());
+		}
+	}
+
+	private String addKeyToUrl(final String url) {
+		if (null == key) {
+			return url;
+		}
+
+		return url + "&key=" + key;
 	}
 
 }

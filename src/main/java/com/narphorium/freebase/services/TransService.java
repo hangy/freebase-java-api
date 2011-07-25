@@ -15,20 +15,19 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 
-import com.narphorium.freebase.auth.Authorizer;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class TransService extends AbstractFreebaseService {
 
 	private static final Log LOG = LogFactory.getLog(TransService.class);
 
-	public TransService(final Authorizer authorizer, final HttpClient httpClient) {
-		super(authorizer, httpClient);
+	public TransService(final String key, final HttpClient httpClient) {
+		super(key, httpClient);
 	}
 
-	public TransService(final URL baseUrl, final Authorizer authorizer,
+	public TransService(final URL baseUrl, final String key,
 			final HttpClient httpClient) {
-		super(baseUrl, authorizer, httpClient);
+		super(baseUrl, key, httpClient);
 	}
 
 	public final Image fetchImage(final String id)
