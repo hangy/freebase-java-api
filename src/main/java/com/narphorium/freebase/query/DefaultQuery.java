@@ -16,10 +16,9 @@ public class DefaultQuery extends AbstractQuery implements Query {
 
 	private final JsonFactory jsonFactory;
 
-	public DefaultQuery(final JsonFactory jsonFactory, final String name,
-			final Object data, final List<Parameter> parameters,
-			final List<Parameter> blankFields) {
-		super(jsonFactory, name, data, parameters, blankFields);
+	public DefaultQuery(final JsonFactory jsonFactory, final Object data,
+			final List<Parameter> parameters, final List<Parameter> blankFields) {
+		super(jsonFactory, data, parameters, blankFields);
 		if (null == jsonFactory) {
 			throw new IllegalArgumentException("jsonFactory cannot be null");
 		}

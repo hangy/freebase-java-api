@@ -66,8 +66,7 @@ public class ParameterTypeResolver {
 			final ReadService readService) {
 		this.readService = readService;
 		this.expectedTypeQuery = new QueryParser(jsonFactory)
-				.parse("q1",
-						"{\"property_id:id\":null,\"type\":\"/type/property\",\"expected_type:expected_type\":null}");
+				.parse("{\"property_id:id\":null,\"type\":\"/type/property\",\"expected_type:expected_type\":null}");
 	}
 
 	public final void process(final Query query) {
@@ -112,6 +111,7 @@ public class ParameterTypeResolver {
 				} else if (!mqlReservedWords.contains(key)) {
 					childExpectedType = lookupExpectedType(key, ept);
 				}
+
 				processData(query, value, childExpectedType);
 			}
 		}

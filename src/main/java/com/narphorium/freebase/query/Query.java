@@ -12,8 +12,6 @@ public interface Query {
 
 	void parseParameterValue(String name, String value);
 
-	String getName();
-
 	void resetParameters();
 
 	Object getData();

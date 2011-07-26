@@ -16,18 +16,15 @@ public abstract class AbstractQuery implements Query {
 	private static final Log LOG = LogFactory.getLog(AbstractQuery.class);
 
 	private final JsonFactory jsonFactory;
-	private final String name;
 	private List<Parameter> parameters = new ArrayList<Parameter>();
 	private List<Parameter> blankFields = new ArrayList<Parameter>();
 	private Map<String, Parameter> parametersByName = new HashMap<String, Parameter>();
 	private Object data;
 	private ResultSet resultSet;
 
-	public AbstractQuery(final JsonFactory jsonFactory, final String name,
-			final Object data, final List<Parameter> parameters,
-			final List<Parameter> blankFields) {
+	public AbstractQuery(final JsonFactory jsonFactory, final Object data,
+			final List<Parameter> parameters, final List<Parameter> blankFields) {
 		this.jsonFactory = jsonFactory;
-		this.name = name;
 		this.data = data;
 		for (final Parameter parameter : parameters) {
 			this.parameters.add(parameter);
@@ -39,7 +36,6 @@ public abstract class AbstractQuery implements Query {
 
 	public AbstractQuery(final JsonFactory jsonFactory, final Query query) {
 		this.jsonFactory = jsonFactory;
-		this.name = query.getName();
 		this.data = copyData(query.getData());
 		for (final Parameter parameter : query.getParameters()) {
 			this.parameters.add(parameter);
@@ -71,10 +67,6 @@ public abstract class AbstractQuery implements Query {
 		} else {
 			return data;
 		}
-	}
-
-	public final String getName() {
-		return name;
 	}
 
 	public final Object getData() {

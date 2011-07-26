@@ -38,7 +38,7 @@ public class QueryParser {
 		this.jsonFactory = jsonFactory;
 	}
 
-	public final Query parse(final String name, final String queryString) {
+	public final Query parse(final String queryString) {
 		final List<Parameter> parameters = new ArrayList<Parameter>();
 		final Map<String, Parameter> parametersByName = new HashMap<String, Parameter>();
 		final List<Parameter> blankFields = new ArrayList<Parameter>();
@@ -52,13 +52,10 @@ public class QueryParser {
 
 		processData(new JsonPath(), data, blankFields, parameters,
 				parametersByName, true);
-		return new DefaultQuery(jsonFactory, name, data, parameters,
-				blankFields);
+		return new DefaultQuery(jsonFactory, data, parameters, blankFields);
 	}
 
 	public final Query parse(final File queryFile) {
-		final String name = queryFile.getName().substring(0,
-				queryFile.getName().lastIndexOf('.'));
 		final StringBuilder queryString = new StringBuilder();
 		try {
 			final BufferedReader reader = new BufferedReader(new FileReader(
@@ -70,7 +67,7 @@ public class QueryParser {
 					queryString.append("\n");
 				}
 
-				return parse(name, queryString.toString());
+				return parse(queryString.toString());
 			} finally {
 				reader.close();
 			}

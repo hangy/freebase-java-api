@@ -34,8 +34,7 @@ public class ReadService extends AbstractFreebaseService {
 
 		final String response = fetchPage(url);
 		final Map<String, Object> data = (Map<String, Object>) parseJSON(response);
-		final Map<String, Object> result = (Map<String, Object>) data.get(query
-				.getName());
+		final Map<String, Object> result = (Map<String, Object>) data;
 		parseServiceErrors(query, result);
 		return result;
 	}
@@ -57,18 +56,15 @@ public class ReadService extends AbstractFreebaseService {
 	@SuppressWarnings("unchecked")
 	public final void parseServiceErrors(final Query query,
 			final Map<String, Object> data) throws FreebaseServiceException {
-		// Map<String, Object> responseData = (Map<String, Object>)response;
-		// Map<String, Object> queryData = responseData; //(Map<String,
-		// Object>)responseData.get(query.getName());
-		final String responseCode = data.get("code").toString();
+		final Object responseCodeObject = data.get("code");
+		final String responseCode = null != responseCodeObject ? responseCodeObject
+				.toString() : "";
 		if (responseCode.equals("/api/status/error")) {
 			final List<Map<String, Object>> messages = (List<Map<String, Object>>) data
 					.get("messages");
 			final Map<String, Object> message = messages.get(0);
 			final String code = message.get("code").toString();
 			final String description = message.get("message").toString();
-			// final Map<String, Object> info = (Map<String, Object>)
-			// message.get("info");
 			final String host = null; // info.get("host").toString();
 			final int port = 0; // Integer.parseInt(info.get("port").toString());
 			final double timeout = 0; // Double.parseDouble(info.get("timeout").toString());
