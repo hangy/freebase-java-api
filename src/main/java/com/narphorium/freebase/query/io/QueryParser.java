@@ -28,7 +28,7 @@ public class QueryParser {
 	private static Matcher parameterNameMatcher = parameterNamePattern
 			.matcher("");
 
-	public final Query parse(final String name, final String queryString) {
+	public final Query parse(final String queryString) {
 		final JSONReader reader = new JSONReader();
 		final List<Parameter> parameters = new ArrayList<Parameter>();
 		final Map<String, Parameter> parametersByName = new HashMap<String, Parameter>();
@@ -36,12 +36,10 @@ public class QueryParser {
 		final Object data = reader.read(queryString);
 		processData(new JsonPath(), data, blankFields, parameters,
 				parametersByName, true);
-		return new DefaultQuery(name, data, parameters, blankFields);
+		return new DefaultQuery(data, parameters, blankFields);
 	}
 
 	public final Query parse(final File queryFile) {
-		final String name = queryFile.getName().substring(0,
-				queryFile.getName().lastIndexOf('.'));
 		final StringBuilder queryString = new StringBuilder();
 		try {
 			final BufferedReader reader = new BufferedReader(new FileReader(
@@ -53,7 +51,7 @@ public class QueryParser {
 					queryString.append("\n");
 				}
 
-				return parse(name, queryString.toString());
+				return parse(queryString.toString());
 			} finally {
 				reader.close();
 			}
@@ -99,14 +97,16 @@ public class QueryParser {
 						parametersByName.put(name, parameter);
 						parameters.add(parameter);
 					}
+
 					if (value instanceof Map
 							&& ((Map<String, Object>) value)
 									.containsKey("value")) {
 						childPath.addElement("value");
 					}
-					// parameter.addPath(childPath);
+
 					parameter.setPath(childPath);
 				}
+
 				if (value == null) {
 					Parameter blankField = new Parameter(name, id, value);
 					blankField.setPath(childPath);

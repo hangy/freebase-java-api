@@ -64,8 +64,7 @@ public class ParameterTypeResolver {
 	public ParameterTypeResolver(final ReadService readService) {
 		this.readService = readService;
 		this.expectedTypeQuery = new QueryParser()
-				.parse("q1",
-						"{\"property_id:id\":null,\"type\":\"/type/property\",\"expected_type:expected_type\":null}");
+				.parse("{\"property_id:id\":null,\"type\":\"/type/property\",\"expected_type:expected_type\":null}");
 	}
 
 	public final void process(final Query query) {
@@ -93,6 +92,7 @@ public class ParameterTypeResolver {
 					ept = ((Map<String, String>) type).get("id");
 				}
 			}
+
 			for (String key : mapData.keySet()) {
 				Object value = mapData.get(key);
 				String childExpectedType = "/type/object";
@@ -109,6 +109,7 @@ public class ParameterTypeResolver {
 				} else if (!mqlReservedWords.contains(key)) {
 					childExpectedType = lookupExpectedType(key, ept);
 				}
+
 				processData(query, value, childExpectedType);
 			}
 		}
@@ -120,10 +121,12 @@ public class ParameterTypeResolver {
 		} else if (id.equals("value")) {
 			return parentType;
 		}
+
 		String property = id;
 		if (!property.matches("/[\\w\\d_]+/[\\w\\d_]+/[\\w\\d_]+")) {
 			property = parentType + "/" + id;
 		}
+
 		String expectedType = expectedTypeByProperty.get(property);
 		if (expectedType == null) {
 			expectedTypeQuery.setParameterValue("property_id", property);
@@ -140,6 +143,7 @@ public class ParameterTypeResolver {
 				LOG.error(e.getMessage(), e);
 			}
 		}
+
 		return expectedType;
 	}
 

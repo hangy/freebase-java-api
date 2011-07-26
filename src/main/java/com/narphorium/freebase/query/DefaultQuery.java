@@ -13,16 +13,9 @@ public class DefaultQuery extends AbstractQuery implements Query {
 
 	private static final Log LOG = LogFactory.getLog(DefaultQuery.class);
 
-	public DefaultQuery(final String name, final Object data,
-			final List<Parameter> parameters, final List<Parameter> blankFields) {
-		super(name, data, parameters, blankFields);
-
-		/*
-		 * for (Parameter parameter : parameters) {
-		 * System.out.print(parameter.getName()); for (Object[] path :
-		 * parameter.getPaths()) { System.out.print(" - "); for (Object e :
-		 * path) { System.out.print("/" + e); } System.out.println(); } }
-		 */
+	public DefaultQuery(final Object data, final List<Parameter> parameters,
+			final List<Parameter> blankFields) {
+		super(data, parameters, blankFields);
 	}
 
 	public DefaultQuery(final Query query) {
