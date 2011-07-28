@@ -6,21 +6,20 @@ import java.net.URL;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.api.client.http.HttpTransport;
-import com.narphorium.freebase.auth.Authorizer;
+import com.google.api.client.http.HttpRequestFactory;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class UploadService extends AbstractFreebaseService {
 	private static final Log LOG = LogFactory.getLog(UploadService.class);
 
-	public UploadService(final String key, final Authorizer authorizer,
-			final HttpTransport httpTransport) {
-		super(key, authorizer, httpTransport);
+	public UploadService(final String key,
+			final HttpRequestFactory httpRequestFactory) {
+		super(key, httpRequestFactory);
 	}
 
 	public UploadService(final URL baseUrl, final String key,
-			final Authorizer authorizer, final HttpTransport httpTransport) {
-		super(baseUrl, key, authorizer, httpTransport);
+			final HttpRequestFactory httpRequestFactory) {
+		super(baseUrl, key, httpRequestFactory);
 	}
 
 	public final void uploadImage(final byte[] content, final String contentType)

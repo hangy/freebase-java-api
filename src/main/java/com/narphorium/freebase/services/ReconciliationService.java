@@ -10,7 +10,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.HttpRequestFactory;
 import com.narphorium.freebase.results.ReconciliationResult;
 import com.narphorium.freebase.results.ReconciliationResultSet;
 
@@ -20,13 +20,13 @@ public class ReconciliationService extends AbstractFreebaseService {
 			.getLog(ReconciliationService.class);
 
 	public ReconciliationService(final String key,
-			final HttpTransport httpTransport) {
-		super(key, httpTransport);
+			final HttpRequestFactory httpRequestFactory) {
+		super(key, httpRequestFactory);
 	}
 
 	public ReconciliationService(final URL baseUrl, final String key,
-			final HttpTransport httpTransport) {
-		super(baseUrl, key, httpTransport);
+			final HttpRequestFactory httpRequestFactory) {
+		super(baseUrl, key, httpRequestFactory);
 	}
 
 	public final ReconciliationResultSet reconcile(

@@ -8,8 +8,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.api.client.http.HttpTransport;
-import com.narphorium.freebase.auth.Authorizer;
+import com.google.api.client.http.HttpRequestFactory;
 import com.narphorium.freebase.query.Query;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
@@ -17,14 +16,14 @@ public class WriteService extends AbstractFreebaseService {
 
 	private static final Log LOG = LogFactory.getLog(WriteService.class);
 
-	public WriteService(final String key, final Authorizer authorizer,
-			final HttpTransport httpTransport) {
-		super(key, authorizer, httpTransport);
+	public WriteService(final String key,
+			final HttpRequestFactory httpRequestFactory) {
+		super(key, httpRequestFactory);
 	}
 
 	public WriteService(final URL baseUrl, final String key,
-			final Authorizer authorizer, final HttpTransport httpTransport) {
-		super(baseUrl, key, authorizer, httpTransport);
+			final HttpRequestFactory httpRequestFactory) {
+		super(baseUrl, key, httpRequestFactory);
 	}
 
 	public final String write(final Query query)

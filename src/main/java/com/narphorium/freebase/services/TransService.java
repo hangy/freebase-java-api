@@ -9,55 +9,41 @@ import javax.imageio.ImageIO;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpResponse;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class TransService extends AbstractFreebaseService {
 
 	private static final Log LOG = LogFactory.getLog(TransService.class);
 
-	public TransService(final String key, final HttpTransport httpTransport) {
-		super(key, httpTransport);
+	public TransService(final String key,
+			final HttpRequestFactory httpRequestFactory) {
+		super(key, httpRequestFactory);
 	}
 
 	public TransService(final URL baseUrl, final String key,
-			final HttpTransport httpTransport) {
-		super(baseUrl, key, httpTransport);
+			final HttpRequestFactory httpRequestFactory) {
+		super(baseUrl, key, httpRequestFactory);
 	}
 
 	public final Image fetchImage(final String id)
 			throws FreebaseServiceException {
-		Image result = null;
-
 		try {
 			final String url = getUrlForId(id, "image");
-			final HttpGet method = new HttpGet(url);
-			method.addHeader("User-Agent", USER_AGENT);
-			final ResponseHandler<Image> handler = new ResponseHandler<Image>() {
-				public Image handleResponse(HttpResponse response)
-						throws IOException {
-					final int status = response.getStatusLine().getStatusCode();
+			final HttpRequest request = buildGetRequest(url);
+			final HttpResponse response = request.execute();
+			if (!response.isSuccessStatusCode) {
+				throw new IOException(response + ": " + response.statusCode
+						+ " " + response.statusMessage);
+			}
 
-					if (status != HttpStatus.SC_OK) {
-						throw new IOException(status + ": "
-								+ response.getStatusLine().getReasonPhrase());
-					}
-
-					final HttpEntity entity = response.getEntity();
-					if (entity != null) {
-						return ImageIO.read(entity.getContent());
-					} else {
-						return null;
-					}
-				}
-			};
-
-			result = executeHttpRequest(method, handler);
+			return ImageIO.read(response.getContent());
 		} catch (IOException e) {
 			LOG.error(e.getMessage(), e);
+			return null;
 		}
-
-		return result;
 	}
 
 	public final String fetchArticle(final String id) throws IOException,
