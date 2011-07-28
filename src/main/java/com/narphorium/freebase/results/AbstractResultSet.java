@@ -64,7 +64,7 @@ public abstract class AbstractResultSet implements ResultSet {
 
 	public final Result next() throws FreebaseServiceException {
 		++currentResult;
-		if (currentResult >= (results.size() - 1) && cursor instanceof String) {
+		if (currentResult >= (results.size() - 1) && cursor instanceof String && !((String)cursor).isEmpty()) {
 			fetchNextPage();
 		}
 
