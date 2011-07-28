@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.api.client.json.GenericJson;
 import com.google.api.client.json.JsonFactory;
 import com.narphorium.freebase.query.DefaultQuery;
 import com.narphorium.freebase.query.JsonPath;
@@ -44,7 +45,7 @@ public class QueryParser {
 		final List<Parameter> blankFields = new ArrayList<Parameter>();
 		Object data;
 		try {
-			data = jsonFactory.fromString(queryString, Object.class);
+			data = jsonFactory.fromString(queryString, GenericJson.class);
 		} catch (final IOException e) {
 			LOG.error(e.getMessage(), e);
 			data = null;
