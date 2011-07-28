@@ -5,24 +5,24 @@ import java.net.URL;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.client.HttpClient;
 
 import com.google.api.client.json.JsonFactory;
-import com.narphorium.freebase.auth.Authorizer;
+import com.google.api.client.http.HttpRequestFactory;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class UploadService extends AbstractFreebaseService {
 	private static final Log LOG = LogFactory.getLog(UploadService.class);
 
-	public UploadService(final JsonFactory jsonFactory, final String key,
-			final Authorizer authorizer, final HttpClient httpClient) {
-		super(jsonFactory, key, authorizer, httpClient);
+	public UploadService(final String key,
+			final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(key, httpRequestFactory, jsonFactory);
 	}
 
-	public UploadService(final JsonFactory jsonFactory, final URL baseUrl,
-			final String key, final Authorizer authorizer,
-			final HttpClient httpClient) {
-		super(jsonFactory, baseUrl, key, authorizer, httpClient);
+	public UploadService(final URL baseUrl, final String key,
+			final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(baseUrl, key, httpRequestFactory, jsonFactory);
 	}
 
 	public final void uploadImage(final byte[] content, final String contentType)

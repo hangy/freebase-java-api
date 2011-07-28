@@ -8,63 +8,45 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
 
 import com.google.api.client.json.JsonFactory;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpResponse;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class TransService extends AbstractFreebaseService {
 
 	private static final Log LOG = LogFactory.getLog(TransService.class);
 
-	public TransService(final JsonFactory jsonFactory, final String key,
-			final HttpClient httpClient) {
-		super(jsonFactory, key, httpClient);
+	public TransService(final String key,
+			final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(key, httpRequestFactory, jsonFactory);
 	}
 
-	public TransService(final JsonFactory jsonFactory, final URL baseUrl,
-			final String key, final HttpClient httpClient) {
-		super(jsonFactory, baseUrl, key, httpClient);
+	public TransService(final URL baseUrl, final String key,
+			final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(baseUrl, key, httpRequestFactory, jsonFactory);
 	}
 
 	public final Image fetchImage(final String id)
 			throws FreebaseServiceException {
-		Image result = null;
-
 		try {
 			final String url = getUrlForId(id, "image");
-			final HttpGet method = new HttpGet(url);
-			method.addHeader("User-Agent", USER_AGENT);
-			final ResponseHandler<Image> handler = new ResponseHandler<Image>() {
-				public Image handleResponse(HttpResponse response)
-						throws IOException {
-					final int status = response.getStatusLine().getStatusCode();
+			final HttpRequest request = buildGetRequest(url);
+			final HttpResponse response = request.execute();
+			if (!response.isSuccessStatusCode) {
+				throw new IOException(response + ": " + response.statusCode
+						+ " " + response.statusMessage);
+			}
 
-					if (status != HttpStatus.SC_OK) {
-						throw new IOException(status + ": "
-								+ response.getStatusLine().getReasonPhrase());
-					}
-
-					final HttpEntity entity = response.getEntity();
-					if (entity != null) {
-						return ImageIO.read(entity.getContent());
-					} else {
-						return null;
-					}
-				}
-			};
-
-			result = executeHttpRequest(method, handler);
+			return ImageIO.read(response.getContent());
 		} catch (IOException e) {
 			LOG.error(e.getMessage(), e);
+			return null;
 		}
-
-		return result;
 	}
 
 	public final String fetchArticle(final String id) throws IOException,

@@ -6,9 +6,8 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.client.HttpClient;
-
 import com.google.api.client.json.JsonFactory;
+import com.google.api.client.http.HttpRequestFactory;
 import com.narphorium.freebase.query.Query;
 import com.narphorium.freebase.results.ResultSet;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
@@ -16,21 +15,24 @@ import com.narphorium.freebase.services.exceptions.FreebaseServiceTimeoutExcepti
 
 public class ReadService extends AbstractFreebaseService {
 
-	public ReadService(final JsonFactory jsonFactory, final String key,
-			final HttpClient httpClient) {
-		super(jsonFactory, key, httpClient);
+	public ReadService(final String key,
+			final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(key, httpRequestFactory, jsonFactory);
 	}
 
-	public ReadService(final JsonFactory jsonFactory, final URL baseUrl,
-			final String key, final HttpClient httpClient) {
-		super(jsonFactory, baseUrl, key, httpClient);
+	public ReadService(final URL baseUrl, final String key,
+			final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(baseUrl, key, httpRequestFactory, jsonFactory);
 	}
 
 	@SuppressWarnings("unchecked")
 	public final Map<String, Object> readRaw(final Query query,
 			final Object cursor) throws IOException, FreebaseServiceException {
 		final String url = getBaseUrl() + "/mqlread?query="
-				+ URLEncoder.encode(query.toJSON(), "UTF-8") + "&cursor=" + cursor;
+				+ URLEncoder.encode(query.toJSON(), "UTF-8") + "&cursor="
+				+ cursor;
 
 		final String response = fetchPage(url);
 		final Map<String, Object> data = (Map<String, Object>) parseJSON(response);

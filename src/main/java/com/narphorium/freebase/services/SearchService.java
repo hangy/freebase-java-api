@@ -2,22 +2,23 @@ package com.narphorium.freebase.services;
 
 import java.net.URL;
 
-import org.apache.http.client.HttpClient;
-
 import com.google.api.client.json.JsonFactory;
+import com.google.api.client.http.HttpRequestFactory;
 import com.narphorium.freebase.results.SearchResultSet;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class SearchService extends AbstractFreebaseService {
 
-	public SearchService(final JsonFactory jsonFactory, final String key,
-			final HttpClient httpClient) {
-		super(jsonFactory, key, httpClient);
+	public SearchService(final String key,
+			final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(key, httpRequestFactory, jsonFactory);
 	}
 
-	public SearchService(final JsonFactory jsonFactory, final URL baseUrl,
-			final String key, final HttpClient httpClient) {
-		super(jsonFactory, baseUrl, key, httpClient);
+	public SearchService(final URL baseUrl, final String key,
+			final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(baseUrl, key, httpRequestFactory, jsonFactory);
 	}
 
 	// TODO
