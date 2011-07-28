@@ -14,6 +14,7 @@ import org.stringtree.json.JSONReader;
 import org.stringtree.json.JSONWriter;
 
 import com.google.api.client.http.HttpTransport;
+import com.google.common.base.Preconditions;
 import com.narphorium.freebase.auth.Authorizer;
 
 public class AbstractFreebaseService {
@@ -46,9 +47,8 @@ public class AbstractFreebaseService {
 			LOG.error(e.getMessage(), e);
 		}
 
-		if (null == httpTransport) {
-			throw new IllegalArgumentException("httpTransport cannot be null");
-		}
+
+		Preconditions.checkNotNull(httpTransport);
 
 		this.key = key;
 		this.authorizer = null;
@@ -57,13 +57,8 @@ public class AbstractFreebaseService {
 
 	protected AbstractFreebaseService(final URL baseUrl, final String key,
 			final HttpTransport httpTransport) {
-		if (null == baseUrl) {
-			throw new IllegalArgumentException("baseUrl cannot be null");
-		}
-
-		if (null == httpTransport) {
-			throw new IllegalArgumentException("httpTransport cannot be null");
-		}
+        Preconditions.checkNotNull(baseUrl);
+		Preconditions.checkNotNull(httpTransport);
 
 		this.baseUrl = baseUrl;
 		this.key = key;
@@ -79,13 +74,8 @@ public class AbstractFreebaseService {
 			LOG.error(e.getMessage(), e);
 		}
 
-		if (null == authorizer) {
-			throw new IllegalArgumentException("authorizer cannot be null");
-		}
-
-		if (null == httpTransport) {
-			throw new IllegalArgumentException("httpTransport cannot be null");
-		}
+		Preconditions.checkNotNull(authorizer);
+		Preconditions.checkNotNull(httpTransport);
 
 		this.key = key;
 		this.authorizer = authorizer;
@@ -94,17 +84,9 @@ public class AbstractFreebaseService {
 
 	protected AbstractFreebaseService(final URL baseUrl, final String key,
 			final Authorizer authorizer, final HttpTransport httpTransport) {
-		if (null == baseUrl) {
-			throw new IllegalArgumentException("baseUrl cannot be null");
-		}
-
-		if (null == authorizer) {
-			throw new IllegalArgumentException("authorizer cannot be null");
-		}
-
-		if (null == httpTransport) {
-			throw new IllegalArgumentException("httpTransport cannot be null");
-		}
+		Preconditions.checkNotNull(baseUrl);
+		Preconditions.checkNotNull(authorizer);
+		Preconditions.checkNotNull(httpTransport);
 
 		this.baseUrl = baseUrl;
 		this.key = key;
@@ -121,10 +103,7 @@ public class AbstractFreebaseService {
 	}
 
 	public final void setMaximumRetries(final int maximumRetries) {
-		if (1 > maximumRetries) {
-			throw new IllegalArgumentException(
-					"maximumRetries must be 1 or higher");
-		}
+		Preconditions.checkArgument(1 <= maximumRetries);
 
 		this.maximumRetries = maximumRetries;
 	}
