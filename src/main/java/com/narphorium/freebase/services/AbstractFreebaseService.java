@@ -33,6 +33,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import com.google.api.client.json.JsonFactory;
+import com.google.common.base.Preconditions;
 import com.narphorium.freebase.auth.Authorizer;
 
 public class AbstractFreebaseService {
@@ -60,47 +61,28 @@ public class AbstractFreebaseService {
 
 	protected AbstractFreebaseService(final JsonFactory jsonFactory,
 			final String key, final HttpClient httpClient) {
-		if (null == jsonFactory) {
-			throw new IllegalArgumentException("jsonFactory cannot be null");
-		}
-
 		try {
 			baseUrl = new URL("https://www.googleapis.com/freebase/v1");
 		} catch (MalformedURLException e) {
 			LOG.error(e.getMessage(), e);
 		}
 
-		if (null == httpClient) {
-			throw new IllegalArgumentException("httpClient cannot be null");
-		}
-
-		this.jsonFactory = jsonFactory;
+		this.jsonFactory = Preconditions.checkNotNull(jsonFactory);
 		this.key = key;
 		this.authorizer = null;
-		this.httpClient = httpClient;
+		this.httpClient = Preconditions.checkNotNull(httpClient);
 		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
 				this.cookieStore);
 	}
 
 	protected AbstractFreebaseService(final JsonFactory jsonFactory,
 			final URL baseUrl, final String key, final HttpClient httpClient) {
-		if (null == jsonFactory) {
-			throw new IllegalArgumentException("jsonFactory cannot be null");
-		}
 
-		if (null == baseUrl) {
-			throw new IllegalArgumentException("baseUrl cannot be null");
-		}
-
-		if (null == httpClient) {
-			throw new IllegalArgumentException("httpClient cannot be null");
-		}
-
-		this.jsonFactory = jsonFactory;
-		this.baseUrl = baseUrl;
+		this.jsonFactory = Preconditions.checkNotNull(jsonFactory);
+		this.baseUrl = Preconditions.checkNotNull(baseUrl);
 		this.key = key;
 		this.authorizer = null;
-		this.httpClient = httpClient;
+		this.httpClient = Preconditions.checkNotNull(httpClient);
 		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
 				this.cookieStore);
 	}
@@ -108,28 +90,16 @@ public class AbstractFreebaseService {
 	protected AbstractFreebaseService(final JsonFactory jsonFactory,
 			final String key, final Authorizer authorizer,
 			final HttpClient httpClient) {
-		if (null == jsonFactory) {
-			throw new IllegalArgumentException("jsonFactory cannot be null");
-		}
-
 		try {
 			baseUrl = new URL("https://www.googleapis.com/freebase/v1");
 		} catch (MalformedURLException e) {
 			LOG.error(e.getMessage(), e);
 		}
 
-		if (null == authorizer) {
-			throw new IllegalArgumentException("authorizer cannot be null");
-		}
-
-		if (null == httpClient) {
-			throw new IllegalArgumentException("httpClient cannot be null");
-		}
-
-		this.jsonFactory = jsonFactory;
+		this.jsonFactory = Preconditions.checkNotNull(jsonFactory);
 		this.key = key;
-		this.authorizer = authorizer;
-		this.httpClient = httpClient;
+		this.authorizer = Preconditions.checkNotNull(authorizer);
+		this.httpClient = Preconditions.checkNotNull(httpClient);
 		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
 				this.cookieStore);
 	}
@@ -137,27 +107,11 @@ public class AbstractFreebaseService {
 	protected AbstractFreebaseService(final JsonFactory jsonFactory,
 			final URL baseUrl, final String key, final Authorizer authorizer,
 			final HttpClient httpClient) {
-		if (null == jsonFactory) {
-			throw new IllegalArgumentException("jsonFactory cannot be null");
-		}
-
-		if (null == baseUrl) {
-			throw new IllegalArgumentException("baseUrl cannot be null");
-		}
-
-		if (null == authorizer) {
-			throw new IllegalArgumentException("authorizer cannot be null");
-		}
-
-		if (null == httpClient) {
-			throw new IllegalArgumentException("httpClient cannot be null");
-		}
-
-		this.jsonFactory = jsonFactory;
-		this.baseUrl = baseUrl;
+		this.jsonFactory = Preconditions.checkNotNull(jsonFactory);
+		this.baseUrl = Preconditions.checkNotNull(baseUrl);
 		this.key = key;
-		this.authorizer = authorizer;
-		this.httpClient = httpClient;
+		this.authorizer = Preconditions.checkNotNull(authorizer);
+		this.httpClient = Preconditions.checkNotNull(httpClient);
 		this.localContext.setAttribute(ClientContext.COOKIE_STORE,
 				this.cookieStore);
 	}
@@ -171,10 +125,7 @@ public class AbstractFreebaseService {
 	}
 
 	public final void setMaximumRetries(final int maximumRetries) {
-		if (1 > maximumRetries) {
-			throw new IllegalArgumentException(
-					"maximumRetries must be 1 or higher");
-		}
+		Preconditions.checkArgument(1 <= maximumRetries);
 
 		this.maximumRetries = maximumRetries;
 	}

@@ -30,7 +30,7 @@ public class ReadService extends AbstractFreebaseService {
 	public final Map<String, Object> readRaw(final Query query,
 			final Object cursor) throws IOException, FreebaseServiceException {
 		final String url = getBaseUrl() + "/mqlread?query="
-				+ URLEncoder.encode(query.toJSON(), "UTF-8");
+				+ URLEncoder.encode(query.toJSON(), "UTF-8") + "&cursor=" + cursor;
 
 		final String response = fetchPage(url);
 		final Map<String, Object> data = (Map<String, Object>) parseJSON(response);
