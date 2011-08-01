@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.google.api.client.http.HttpRequestFactory;
+import com.narphorium.freebase.services.exceptions.AuthenticationException;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class UploadService extends AbstractFreebaseService {
@@ -23,17 +24,18 @@ public class UploadService extends AbstractFreebaseService {
 	}
 
 	public final void uploadImage(final byte[] content, final String contentType)
-			throws FreebaseServiceException {
+			throws FreebaseServiceException, AuthenticationException {
 		this.upload(content, contentType, "image");
 	}
 
 	public final void uploadText(final byte[] content, final String contentType)
-			throws FreebaseServiceException {
+			throws FreebaseServiceException, AuthenticationException {
 		this.upload(content, contentType, "text");
 	}
 
 	private final void upload(final byte[] content, final String contentType,
-			final String uploadType) throws FreebaseServiceException {
+			final String uploadType) throws FreebaseServiceException,
+			AuthenticationException {
 		try {
 			final URL url = new URL(getBaseUrl() + "/" + uploadType);
 			final String result = uploadFile(url, content, contentType);

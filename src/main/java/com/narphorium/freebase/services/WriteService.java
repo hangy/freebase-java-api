@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.google.api.client.http.HttpRequestFactory;
 import com.narphorium.freebase.query.Query;
+import com.narphorium.freebase.services.exceptions.AuthenticationException;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class WriteService extends AbstractFreebaseService {
@@ -27,7 +28,7 @@ public class WriteService extends AbstractFreebaseService {
 	}
 
 	public final String write(final Query query)
-			throws FreebaseServiceException {
+			throws FreebaseServiceException, AuthenticationException {
 		try {
 			final URL url = new URL(getBaseUrl() + "/mqlwrite");
 			final Map<String, String> content = new HashMap<String, String>();
