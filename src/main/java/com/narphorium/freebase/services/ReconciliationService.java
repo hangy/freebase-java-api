@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.MethodNotSupportedException;
 
 import com.google.api.client.http.HttpRequestFactory;
 import com.narphorium.freebase.results.ReconciliationResult;
@@ -31,9 +32,11 @@ public class ReconciliationService extends AbstractFreebaseService {
 
 	public final ReconciliationResultSet reconcile(
 			final Map<String, Object> values) {
+		// TODO: Where will it be? http://wiki.freebase.com/wiki/?oldid=7968
+		// et al do not have definite information about this atm.
+		throw new UnsupportedOperationException("This method is currently unsupported.");
+		/*
 		try {
-			// TODO: Where will it be? http://wiki.freebase.com/wiki/?oldid=7968
-			// et al do not have definite information about this atm.
 			final URL url = new URL(getBaseUrl() + "/reconciliation/query");
 			LOG.debug("URL: " + url);
 
@@ -51,7 +54,7 @@ public class ReconciliationService extends AbstractFreebaseService {
 			LOG.error(e.getMessage(), e);
 		}
 
-		return new ReconciliationResultSet();
+		return new ReconciliationResultSet();*/
 	}
 
 	private static String buildQuery(final Map<String, Object> values) {
