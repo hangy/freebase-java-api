@@ -3,15 +3,13 @@ package com.narphorium.freebase.services;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.List;
 import java.util.Map;
 
-import com.google.api.client.json.JsonFactory;
 import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.json.JsonFactory;
 import com.narphorium.freebase.query.Query;
 import com.narphorium.freebase.results.ResultSet;
 import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
-import com.narphorium.freebase.services.exceptions.FreebaseServiceTimeoutException;
 
 public class ReadService extends AbstractFreebaseService {
 
@@ -57,26 +55,18 @@ public class ReadService extends AbstractFreebaseService {
 	@SuppressWarnings("unchecked")
 	public final void parseServiceErrors(final Query query,
 			final Map<String, Object> data) throws FreebaseServiceException {
-		final Object responseCodeObject = data.get("code");
-		final String responseCode = null != responseCodeObject ? responseCodeObject
-				.toString() : "";
-		if (responseCode.equals("/api/status/error")) {
-			final List<Map<String, Object>> messages = (List<Map<String, Object>>) data
-					.get("messages");
-			final Map<String, Object> message = messages.get(0);
-			final String code = message.get("code").toString();
-			final String description = message.get("message").toString();
-			final String host = null; // info.get("host").toString();
-			final int port = 0; // Integer.parseInt(info.get("port").toString());
-			final double timeout = 0; // Double.parseDouble(info.get("timeout").toString());
-			if (code.equals(FreebaseServiceTimeoutException.ERRORCODE)) {
-				throw new FreebaseServiceTimeoutException(description, host,
-						port, timeout);
-			} else {
-				throw new FreebaseServiceException(code, description, host,
-						port, timeout);
-			}
+		if (!data.containsKey("error")) {
+			return;
 		}
+
+		final Map<String, Object> error = (Map<String, Object>) data
+				.get("error");
+		final int code = Integer.valueOf((String) error.get("code"));
+		final Map<String, Object> errors = (Map<String, Object>) error
+				.get("errors");
+		throw new FreebaseServiceException(code, (String) errors.get("domain"),
+				(String) errors.get("reason"), (String) errors.get("message"),
+				data);
 	}
 
 }

@@ -1,37 +1,40 @@
 package com.narphorium.freebase.services.exceptions;
 
+import java.util.Map;
+
 public class FreebaseServiceException extends Exception {
 
-	private static final long serialVersionUID = 1373399088812605290L;
+	private static final long serialVersionUID = -8328410897564469411L;
 
-	private final String code;
-	private final String host;
-	private final int port;
-	private final double timeout;
+	private final int code;
+	private final String domain;
+	private final String reason;
+	private final Map<String, Object> data;
 
-	public FreebaseServiceException(final String code, final String message,
-			final String host, final int port, final double timeout) {
+	public FreebaseServiceException(final int code, final String domain,
+			final String reason, final String message,
+			final Map<String, Object> data) {
 		super(message);
 		this.code = code;
-		this.host = host;
-		this.port = port;
-		this.timeout = timeout;
+		this.domain = domain;
+		this.reason = reason;
+		this.data = data;
 	}
 
-	public final String getCode() {
+	public final int getCode() {
 		return code;
 	}
 
-	public final String getHost() {
-		return host;
+	public final String getDomain() {
+		return domain;
 	}
 
-	public final int getPort() {
-		return port;
+	public final String getReason() {
+		return reason;
 	}
 
-	public final double getTimeout() {
-		return timeout;
+	public final Map<String, Object> getData() {
+		return data;
 	}
 
 }
