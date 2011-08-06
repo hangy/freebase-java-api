@@ -34,9 +34,9 @@ public class TransService extends AbstractFreebaseService {
 			final String url = getUrlForId(id, "image");
 			final HttpRequest request = buildGetRequest(url);
 			final HttpResponse response = request.execute();
-			if (!response.isSuccessStatusCode) {
-				throw new IOException(response + ": " + response.statusCode
-						+ " " + response.statusMessage);
+			if (!response.isSuccessStatusCode()) {
+				throw new IOException(response + ": " + response.getStatusCode()
+						+ " " + response.getStatusMessage());
 			}
 
 			return ImageIO.read(response.getContent());

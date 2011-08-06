@@ -78,7 +78,7 @@ public class AbstractFreebaseService {
 	protected final HttpRequest buildPostRequest(final String url,
 			final HttpContent content) throws IOException,
 			AuthenticationException {
-		final HttpRequestInitializer initializer = httpRequestFactory.initializer;
+		final HttpRequestInitializer initializer = httpRequestFactory.getInitializer();
 		if (null == initializer
 				|| !(initializer instanceof AccessProtectedResource)) {
 			throw new AuthenticationException();
@@ -103,8 +103,7 @@ public class AbstractFreebaseService {
 	protected final String postContent(final URL url,
 			final Map<String, String> content) throws AuthenticationException {
 		try {
-			final UrlEncodedContent c = new UrlEncodedContent();
-			c.data = content;
+			final UrlEncodedContent c = new UrlEncodedContent(content);
 			final HttpRequest request = buildPostRequest(url.toString(), c);
 
 			return request.execute().parseAsString();
@@ -116,8 +115,7 @@ public class AbstractFreebaseService {
 
 	protected final String uploadFile(final URL url, final byte[] content,
 			final String contentType) throws AuthenticationException {
-		final ByteArrayContent c = new ByteArrayContent(content);
-		c.type = contentType;
+		final ByteArrayContent c = new ByteArrayContent(contentType, content);
 
 		HttpRequest request;
 		try {
