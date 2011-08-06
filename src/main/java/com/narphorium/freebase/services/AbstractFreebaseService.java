@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.google.api.client.auth.oauth2.draft10.AccessProtectedResource;
+import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
@@ -83,7 +84,7 @@ public class AbstractFreebaseService {
 		final HttpRequestInitializer initializer = httpRequestFactory
 				.getInitializer();
 		if (null == initializer
-				|| !(initializer instanceof AccessProtectedResource)) {
+				|| !(initializer instanceof GoogleAccessProtectedResource)) {
 			throw new AuthenticationException();
 		}
 
