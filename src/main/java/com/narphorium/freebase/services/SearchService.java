@@ -24,7 +24,8 @@ public class SearchService extends AbstractFreebaseService {
 	// TODO
 	public final SearchResultSet search(final String query)
 			throws FreebaseServiceException {
-		return null;
+		throw new UnsupportedOperationException(
+				"This method is currently unsupported.");
 	}
 
 }

@@ -34,27 +34,28 @@ public class ReconciliationService extends AbstractFreebaseService {
 
 	public final ReconciliationResultSet reconcile(
 			final Map<String, Object> values) {
-		try {
-			// TODO: Where will it be? http://wiki.freebase.com/wiki/?oldid=7968
-			// et al do not have definite information about this atm.
-			final URL url = new URL(getBaseUrl() + "/reconciliation/query");
-			LOG.debug("URL: " + url);
-
-			final String query = buildQuery(values);
-			LOG.debug("Query: " + query);
-
-			final Map<String, String> parameters = new HashMap<String, String>();
-			parameters.put("q", query);
-
-			final String response = postContent(url, parameters);
-			LOG.debug("Response: " + response);
-
-			return new ReconciliationResultSet(parseResults(response));
-		} catch (final IOException e) {
-			LOG.error(e.getMessage(), e);
-		}
-
-		return new ReconciliationResultSet();
+		// TODO: Where will it be? http://wiki.freebase.com/wiki/?oldid=7968
+		// et al do not have definite information about this atm.
+		throw new UnsupportedOperationException(
+				"This method is currently unsupported.");
+		/*
+		 * try { final URL url = new URL(getBaseUrl() +
+		 * "/reconciliation/query"); LOG.debug("URL: " + url);
+		 * 
+		 * final String query = buildQuery(values); LOG.debug("Query: " +
+		 * query);
+		 * 
+		 * final Map<String, String> parameters = new HashMap<String, String>();
+		 * parameters.put("q", query);
+		 * 
+		 * final String response = postContent(url, parameters);
+		 * LOG.debug("Response: " + response);
+		 * 
+		 * return new ReconciliationResultSet(parseResults(response)); } catch
+		 * (final IOException e) { LOG.error(e.getMessage(), e); }
+		 * 
+		 * return new ReconciliationResultSet();
+		 */
 	}
 
 	private String buildQuery(final Map<String, Object> values) {

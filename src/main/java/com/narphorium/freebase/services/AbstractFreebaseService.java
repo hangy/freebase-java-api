@@ -8,14 +8,17 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.api.client.json.JsonFactory;
+import com.google.api.client.auth.oauth2.draft10.AccessProtectedResource;
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.UrlEncodedContent;
+import com.google.api.client.json.JsonFactory;
 import com.google.common.base.Preconditions;
+import com.narphorium.freebase.services.exceptions.AuthenticationException;
 
 public class AbstractFreebaseService {
 
@@ -74,7 +77,15 @@ public class AbstractFreebaseService {
 	}
 
 	protected final HttpRequest buildPostRequest(final String url,
-			final HttpContent content) throws IOException {
+			final HttpContent content) throws IOException,
+			AuthenticationException {
+		final HttpRequestInitializer initializer = httpRequestFactory
+				.getInitializer();
+		if (null == initializer
+				|| !(initializer instanceof AccessProtectedResource)) {
+			throw new AuthenticationException();
+		}
+
 		return httpRequestFactory.buildPostRequest(addKeyToUrl(new GenericUrl(
 				url)), content);
 	}
@@ -92,10 +103,9 @@ public class AbstractFreebaseService {
 	}
 
 	protected final String postContent(final URL url,
-			final Map<String, String> content) {
+			final Map<String, String> content) throws AuthenticationException {
 		try {
-			final UrlEncodedContent c = new UrlEncodedContent();
-			c.data = content;
+			final UrlEncodedContent c = new UrlEncodedContent(content);
 			final HttpRequest request = buildPostRequest(url.toString(), c);
 
 			return request.execute().parseAsString();
@@ -106,10 +116,8 @@ public class AbstractFreebaseService {
 	}
 
 	protected final String uploadFile(final URL url, final byte[] content,
-			final String contentType) {
-
-		final ByteArrayContent c = new ByteArrayContent(content);
-		c.type = contentType;
+			final String contentType) throws AuthenticationException {
+		final ByteArrayContent c = new ByteArrayContent(contentType, content);
 
 		HttpRequest request;
 		try {
