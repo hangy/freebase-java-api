@@ -16,6 +16,7 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.UrlEncodedContent;
+import com.google.api.client.json.GenericJson;
 import com.google.api.client.json.JsonFactory;
 import com.google.common.base.Preconditions;
 import com.narphorium.freebase.services.exceptions.AuthenticationException;
@@ -63,7 +64,7 @@ public class AbstractFreebaseService {
 	}
 
 	protected final Object parseJSON(final String results) throws IOException {
-		return jsonFactory.fromString(results, Object.class);
+		return jsonFactory.fromString(results, GenericJson.class);
 	}
 
 	protected final String generateJSON(final Object object) {
