@@ -6,6 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.google.api.client.json.JsonFactory;
+import com.google.common.base.Preconditions;
 import com.narphorium.freebase.results.DefaultResultSet;
 import com.narphorium.freebase.results.ResultSet;
 import com.narphorium.freebase.services.ReadService;
@@ -19,20 +20,12 @@ public class DefaultQuery extends AbstractQuery implements Query {
 	public DefaultQuery(final JsonFactory jsonFactory, final Object data,
 			final List<Parameter> parameters, final List<Parameter> blankFields) {
 		super(jsonFactory, data, parameters, blankFields);
-		if (null == jsonFactory) {
-			throw new IllegalArgumentException("jsonFactory cannot be null");
-		}
-
-		this.jsonFactory = jsonFactory;
+		this.jsonFactory = Preconditions.checkNotNull(jsonFactory);
 	}
 
 	public DefaultQuery(final JsonFactory jsonFactory, final Query query) {
 		super(jsonFactory, query);
-		if (null == jsonFactory) {
-			throw new IllegalArgumentException("jsonFactory cannot be null");
-		}
-
-		this.jsonFactory = jsonFactory;
+		this.jsonFactory = Preconditions.checkNotNull(jsonFactory);
 	}
 
 	public final void parseParameterValue(final String name,

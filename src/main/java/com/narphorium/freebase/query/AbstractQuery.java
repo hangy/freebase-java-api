@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.google.api.client.json.JsonFactory;
+import com.google.common.base.Preconditions;
 import com.narphorium.freebase.results.ResultSet;
 
 public abstract class AbstractQuery implements Query {
@@ -24,7 +25,7 @@ public abstract class AbstractQuery implements Query {
 
 	public AbstractQuery(final JsonFactory jsonFactory, final Object data,
 			final List<Parameter> parameters, final List<Parameter> blankFields) {
-		this.jsonFactory = jsonFactory;
+		this.jsonFactory = Preconditions.checkNotNull(jsonFactory);
 		this.data = data;
 		for (final Parameter parameter : parameters) {
 			this.parameters.add(parameter);
@@ -35,7 +36,7 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	public AbstractQuery(final JsonFactory jsonFactory, final Query query) {
-		this.jsonFactory = jsonFactory;
+		this.jsonFactory = Preconditions.checkNotNull(jsonFactory);
 		this.data = copyData(query.getData());
 		for (final Parameter parameter : query.getParameters()) {
 			this.parameters.add(parameter);
