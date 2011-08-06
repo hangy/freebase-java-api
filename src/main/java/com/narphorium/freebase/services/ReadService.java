@@ -35,8 +35,7 @@ public class ReadService extends AbstractFreebaseService {
 				+ cursor;
 
 		final String response = fetchPage(url);
-		final Map<String, Object> data = (Map<String, Object>) parseJSON(response);
-		final Map<String, Object> result = (Map<String, Object>) data;
+		final Map<String, Object> result = (Map<String, Object>) parseJSON(response);
 		parseServiceErrors(query, result);
 		return result;
 	}
