@@ -45,7 +45,9 @@ public class QueryParser {
 		final List<Parameter> blankFields = new ArrayList<Parameter>();
 		Object data;
 		try {
-			data = jsonFactory.fromString(queryString, GenericJson.class);
+			data = queryIsArray(queryString) ? jsonFactory.fromString(
+					queryString, GenericJson[].class) : jsonFactory.fromString(
+					queryString, GenericJson.class);
 		} catch (final IOException e) {
 			LOG.error(e.getMessage(), e);
 			data = null;
@@ -79,6 +81,10 @@ public class QueryParser {
 		return null;
 	}
 
+	private boolean queryIsArray(final String queryString) {
+		return null != queryString && queryString.trim().startsWith("[");
+	}
+
 	@SuppressWarnings("unchecked")
 	private void processData(final JsonPath path, final Object data,
 			final List<Parameter> blankFields,
@@ -86,9 +92,9 @@ public class QueryParser {
 			final Map<String, Parameter> parametersByName, final boolean isRoot) {
 		if (data == null) {
 			LOG.info("data is null");
-		} else if (data instanceof List) {
+		} else if (data.getClass().isArray()) {
 			int i = 0;
-			for (final Object element : (List<Object>) data) {
+			for (final Object element : (Object[]) data) {
 				final JsonPath childPath = new JsonPath(path);
 				if (!isRoot) {
 					childPath.addElement(i);
