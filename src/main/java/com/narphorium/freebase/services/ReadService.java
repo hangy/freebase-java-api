@@ -5,6 +5,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
 
+import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.json.JsonFactory;
 import com.narphorium.freebase.query.Query;
@@ -28,9 +29,9 @@ public class ReadService extends AbstractFreebaseService {
 	@SuppressWarnings("unchecked")
 	public final Map<String, Object> readRaw(final Query query,
 			final Object cursor) throws IOException, FreebaseServiceException {
-		final String url = getBaseUrl() + "/mqlread?query="
-				+ URLEncoder.encode(query.toJSON(), "UTF-8") + "&cursor="
-				+ cursor;
+		final GenericUrl url = new GenericUrl(getBaseUrl() + "/mqlread");
+		url.set("query", URLEncoder.encode(query.toJSON(), "UTF-8"));
+		url.set("cursor", cursor);
 
 		final String response = fetchPage(url);
 		final Map<String, Object> result = (Map<String, Object>) parseJSON(response);

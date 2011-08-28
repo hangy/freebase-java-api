@@ -8,7 +8,6 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.api.client.auth.oauth2.draft10.AccessProtectedResource;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
@@ -74,11 +73,21 @@ public class AbstractFreebaseService {
 
 	protected final HttpRequest buildGetRequest(final String url)
 			throws IOException {
-		return httpRequestFactory.buildGetRequest(addKeyToUrl(new GenericUrl(
-				url)));
+		return buildGetRequest(new GenericUrl(formatUrl(url)));
+	}
+
+	protected final HttpRequest buildGetRequest(final GenericUrl url)
+			throws IOException {
+		return httpRequestFactory.buildGetRequest(addKeyToUrl(url));
 	}
 
 	protected final HttpRequest buildPostRequest(final String url,
+			final HttpContent content) throws IOException,
+			AuthenticationException {
+		return buildPostRequest(new GenericUrl(formatUrl(url)), content);
+	}
+
+	protected final HttpRequest buildPostRequest(final GenericUrl url,
 			final HttpContent content) throws IOException,
 			AuthenticationException {
 		final HttpRequestInitializer initializer = httpRequestFactory
@@ -88,16 +97,19 @@ public class AbstractFreebaseService {
 			throw new AuthenticationException();
 		}
 
-		return httpRequestFactory.buildPostRequest(addKeyToUrl(new GenericUrl(
-				url)), content);
+		return httpRequestFactory.buildPostRequest(addKeyToUrl(url), content);
 	}
 
 	protected final String fetchPage(final String url) throws IOException {
-		final String formattedUrl = url.replaceAll(" ", "%20");
+		final HttpRequest request = buildGetRequest(url);
+		final String content = getExecutionResult(request);
+		LOG.debug(content);
 
-		LOG.debug("URL: " + formattedUrl);
+		return content;
+	}
 
-		final HttpRequest request = buildGetRequest(formattedUrl);
+	protected final String fetchPage(final GenericUrl url) throws IOException {
+		final HttpRequest request = buildGetRequest(url);
 		final String content = getExecutionResult(request);
 		LOG.debug(content);
 
@@ -143,6 +155,10 @@ public class AbstractFreebaseService {
 			LOG.error(e.getMessage(), e);
 			return "";
 		}
+	}
+
+	private String formatUrl(final String url) {
+		return url.replaceAll(" ", "%20");
 	}
 
 	private GenericUrl addKeyToUrl(final GenericUrl url) {
