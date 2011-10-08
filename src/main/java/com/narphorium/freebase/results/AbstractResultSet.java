@@ -40,6 +40,8 @@ public abstract class AbstractResultSet implements ResultSet {
 	}
 
 	public final int getNumpages() {
+		// TODO: Review the value to an outside caller. Possibly rename it to
+		// getNumberOfFetchedPages or document it in that way?
 		return numPages;
 	}
 
@@ -50,8 +52,14 @@ public abstract class AbstractResultSet implements ResultSet {
 
 	public final void reset() {
 		fetchedFirstPage = false;
-		currentResult = -1;
+		numPages = 0;
 		cursor = "";
+		resetResult();
+	}
+
+	private void resetResult() {
+		currentResult -= results.size() - 1;
+		results.clear();
 	}
 
 	public final int size() throws FreebaseServiceException {
@@ -68,7 +76,8 @@ public abstract class AbstractResultSet implements ResultSet {
 
 	public final Result next() throws FreebaseServiceException {
 		++currentResult;
-		if (currentResult >= (results.size() - 1) && cursor instanceof String && !((String)cursor).isEmpty()) {
+		if (currentResult >= (results.size() - 1) && cursor instanceof String
+				&& !((String) cursor).isEmpty()) {
 			fetchNextPage();
 		}
 
@@ -85,16 +94,11 @@ public abstract class AbstractResultSet implements ResultSet {
 
 	@SuppressWarnings("unchecked")
 	protected void fetchNextPage() throws FreebaseServiceException {
+		resetResult();
+
 		try {
-			// String response = readService.readRaw(query, cursor);
-			// System.out.println(jsonData);
-			// Map<String, Object> data = (Map<String,
-			// Object>)parser.read(response);
-			// readService.parseServiceErrors(data);
 			final Map<String, Object> q = readService.readRaw(query, cursor);
 
-			// Map<String, Object> q = (Map<String,
-			// Object>)res.get(query.getName());
 			if (q.get("result") instanceof List) {
 				final List<Object> r = (List<Object>) q.get("result");
 				for (final Object obj : r) {
@@ -105,13 +109,13 @@ public abstract class AbstractResultSet implements ResultSet {
 				results.add(new DefaultResult(jsonFactory, query, obj));
 			}
 
-			++numPages;
 			final Object c = q.get("cursor");
 			if (c != null) {
 				cursor = c;
 				LOG.info("CURSOR = " + cursor);
 			}
 
+			++numPages;
 			fetchedFirstPage = true;
 		} catch (final IOException e) {
 			LOG.error(e.getMessage(), e);
