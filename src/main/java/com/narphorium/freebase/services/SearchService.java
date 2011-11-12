@@ -9,6 +9,17 @@ import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class SearchService extends AbstractFreebaseService {
 
+	public SearchService(final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(null, httpRequestFactory, jsonFactory);
+	}
+
+	public SearchService(final URL baseUrl,
+			final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(baseUrl, null, httpRequestFactory, jsonFactory);
+	}
+
 	public SearchService(final String key,
 			final HttpRequestFactory httpRequestFactory,
 			final JsonFactory jsonFactory) {

@@ -14,6 +14,17 @@ import com.narphorium.freebase.services.exceptions.FreebaseServiceException;
 
 public class ReadService extends AbstractFreebaseService {
 
+	public ReadService(final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(null, httpRequestFactory, jsonFactory);
+	}
+
+	public ReadService(final URL baseUrl,
+			final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(baseUrl, null, httpRequestFactory, jsonFactory);
+	}
+
 	public ReadService(final String key,
 			final HttpRequestFactory httpRequestFactory,
 			final JsonFactory jsonFactory) {

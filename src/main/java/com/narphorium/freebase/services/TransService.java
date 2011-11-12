@@ -19,6 +19,17 @@ public class TransService extends AbstractFreebaseService {
 
 	private static final Log LOG = LogFactory.getLog(TransService.class);
 
+	public TransService(final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(null, httpRequestFactory, jsonFactory);
+	}
+
+	public TransService(final URL baseUrl,
+			final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(baseUrl, null, httpRequestFactory, jsonFactory);
+	}
+
 	public TransService(final String key,
 			final HttpRequestFactory httpRequestFactory,
 			final JsonFactory jsonFactory) {

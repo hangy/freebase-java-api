@@ -20,6 +20,17 @@ public class ReconciliationService extends AbstractFreebaseService {
 	private static final Log LOG = LogFactory
 			.getLog(ReconciliationService.class);
 
+	public ReconciliationService(final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(null, httpRequestFactory, jsonFactory);
+	}
+
+	public ReconciliationService(final URL baseUrl,
+			final HttpRequestFactory httpRequestFactory,
+			final JsonFactory jsonFactory) {
+		super(baseUrl, null, httpRequestFactory, jsonFactory);
+	}
+
 	public ReconciliationService(final String key,
 			final HttpRequestFactory httpRequestFactory,
 			final JsonFactory jsonFactory) {
