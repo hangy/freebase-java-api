@@ -7,8 +7,9 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.stringtree.json.JSONWriter;
 
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson.JacksonFactory;
 import com.narphorium.freebase.results.ResultSet;
 
 public abstract class AbstractQuery implements Query {
@@ -127,8 +128,8 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	public final String toJSON() {
-		final JSONWriter writer = new JSONWriter();
-		String query = writer.write(data);
+		final JsonFactory jsonFactory = new JacksonFactory();
+		String query = jsonFactory.toString(data);
 		query = query.replaceAll("\\\\/", "/");
 		return query;
 	}

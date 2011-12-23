@@ -30,8 +30,10 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
-import org.stringtree.json.JSONReader;
-import org.stringtree.json.JSONWriter;
+
+import com.google.api.client.json.GenericJson;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson.JacksonFactory;
 
 public class AbstractFreebaseService {
 
@@ -40,8 +42,7 @@ public class AbstractFreebaseService {
 	private static final Log LOG = LogFactory
 			.getLog(AbstractFreebaseService.class);
 
-	private static final JSONReader jsonParser = new JSONReader();
-	private static final JSONWriter jsonWriter = new JSONWriter();
+	private static final JsonFactory jsonFactory = new JacksonFactory();
 
 	private final HttpClient httpClient;
 	private final HttpContext localContext = new BasicHttpContext();
@@ -106,11 +107,11 @@ public class AbstractFreebaseService {
 	}
 
 	protected static final Object parseJSON(String results) throws IOException {
-		return jsonParser.read(results);
+		return jsonFactory.fromString(results, GenericJson.class);
 	}
 
 	protected static final String generateJSON(Object object) {
-		return jsonWriter.write(object);
+		return jsonFactory.toString(object);
 	}
 
 	protected final String fetchPage(final String url) throws IOException {

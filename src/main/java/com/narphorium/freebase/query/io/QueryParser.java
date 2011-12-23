@@ -13,8 +13,10 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.stringtree.json.JSONReader;
 
+import com.google.api.client.json.GenericJson;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson.JacksonFactory;
 import com.narphorium.freebase.query.DefaultQuery;
 import com.narphorium.freebase.query.JsonPath;
 import com.narphorium.freebase.query.Parameter;
@@ -28,12 +30,22 @@ public class QueryParser {
 	private static Matcher parameterNameMatcher = parameterNamePattern
 			.matcher("");
 
-	public final Query parse(final String name, final String queryString) {
-		final JSONReader reader = new JSONReader();
+	public final Query parse(final String name, final String queryString)
+			throws IOException {
+		final JsonFactory jsonFactory = new JacksonFactory();
 		final List<Parameter> parameters = new ArrayList<Parameter>();
 		final Map<String, Parameter> parametersByName = new HashMap<String, Parameter>();
 		final List<Parameter> blankFields = new ArrayList<Parameter>();
-		final Object data = reader.read(queryString);
+		Object data;
+		try {
+			data = queryIsArray(queryString) ? jsonFactory.fromString(
+					queryString, GenericJson[].class) : jsonFactory.fromString(
+					queryString, GenericJson.class);
+		} catch (final IOException e) {
+			LOG.error(e.getMessage(), e);
+			data = null;
+		}
+
 		processData(new JsonPath(), data, blankFields, parameters,
 				parametersByName, true);
 		return new DefaultQuery(name, data, parameters, blankFields);
@@ -64,6 +76,10 @@ public class QueryParser {
 		return null;
 	}
 
+	private boolean queryIsArray(final String queryString) {
+		return null != queryString && queryString.trim().startsWith("[");
+	}
+
 	@SuppressWarnings("unchecked")
 	private void processData(final JsonPath path, final Object data,
 			final List<Parameter> blankFields,
@@ -71,9 +87,9 @@ public class QueryParser {
 			final Map<String, Parameter> parametersByName, final boolean isRoot) {
 		if (data == null) {
 			LOG.info("data is null");
-		} else if (data instanceof List) {
+		} else if (data instanceof Object[]) {
 			int i = 0;
-			for (Object element : (List<Object>) data) {
+			for (Object element : (Object[]) data) {
 				JsonPath childPath = new JsonPath(path);
 				if (!isRoot) {
 					childPath.addElement(i);

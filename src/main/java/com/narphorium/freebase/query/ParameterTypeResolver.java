@@ -61,7 +61,8 @@ public class ParameterTypeResolver {
 
 	private ReadService readService;
 
-	public ParameterTypeResolver(final ReadService readService) {
+	public ParameterTypeResolver(final ReadService readService)
+			throws IOException {
 		this.readService = readService;
 		this.expectedTypeQuery = new QueryParser()
 				.parse("q1",
