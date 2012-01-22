@@ -42,6 +42,7 @@ public class ReadService extends AbstractFreebaseService {
 		final GenericUrl url = new GenericUrl(getBaseUrl() + "/mqlread");
 		url.set("query", query.toJSON());
 		url.set("cursor", cursor);
+		url.set("html_escape", false);
 
 		final String response = fetchPage(url);
 		final Map<String, Object> result = (Map<String, Object>) parseJSON(response);
