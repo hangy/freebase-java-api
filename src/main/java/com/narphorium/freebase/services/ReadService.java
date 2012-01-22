@@ -2,7 +2,6 @@ package com.narphorium.freebase.services;
 
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Map;
 
 import com.google.api.client.http.GenericUrl;
@@ -41,7 +40,7 @@ public class ReadService extends AbstractFreebaseService {
 	public final Map<String, Object> readRaw(final Query query,
 			final Object cursor) throws IOException, FreebaseServiceException {
 		final GenericUrl url = new GenericUrl(getBaseUrl() + "/mqlread");
-		url.set("query", URLEncoder.encode(query.toJSON(), "UTF-8"));
+		url.set("query", query.toJSON());
 		url.set("cursor", cursor);
 
 		final String response = fetchPage(url);
